@@ -1,0 +1,542 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum AdminRole {
+  SUPER_ADMIN
+  ADMIN
+  MANAGER
+}
+
+enum PriceType {
+  PER_TRIP
+  PER_PERSON
+  PER_HOUR
+  PER_DAY
+}
+
+enum DiscountType {
+  NONE
+  PERCENTAGE
+  FIXED
+}
+
+enum OfferType {
+  PERCENTAGE_DISCOUNT
+  FIXED_DISCOUNT
+  FIRST_BOOKING
+  SEASONAL_OFFER
+  DESTINATION_DISCOUNT
+  PACKAGE_DISCOUNT
+  COUPON_CODE
+  LIMITED_TIME
+}
+
+enum BookingType {
+  DESTINATION_RIDE
+  TOUR_PACKAGE
+  CUSTOM_TOUR
+  AIRPORT_TRANSFER
+  HOTEL_PICKUP
+  TRAIN_STATION_PICKUP
+  TAXI_TRANSFER
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+  REJECTED
+}
+
+enum ReviewStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model User {
+  id            String     @id @default(cuid())
+  name          String
+  email         String     @unique
+  emailVerified Boolean    @default(true)
+  image         String?
+  passwordHash  String?
+  role          AdminRole  @default(ADMIN)
+  active        Boolean    @default(true)
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  sessions      Session[]
+  accounts      Account[]
+  auditLogs     AuditLog[]
+
+  @@index([email])
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  expiresAt DateTime
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model Account {
+  id                    String    @id @default(cuid())
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+}
+
+model Verification {
+  id         String    @id @default(cuid())
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime? @default(now())
+  updatedAt  DateTime? @updatedAt
+}
+
+model DestinationCategory {
+  id           String        @id @default(cuid())
+  name         String        @unique
+  slug         String        @unique
+  description  String?
+  icon         String?
+  sortOrder    Int           @default(0)
+  active       Boolean       @default(true)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  destinations Destination[]
+
+  @@index([slug])
+}
+
+model Destination {
+  id                 String                   @id @default(cuid())
+  name               String
+  slug               String                   @unique
+  shortDescription   String
+  description        String                   @db.Text
+  categoryId         String
+  category           DestinationCategory      @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  coverImage         String
+  price              Float
+  currency           String                   @default("USD")
+  priceType          PriceType                @default(PER_TRIP)
+  discountType       DiscountType             @default(NONE)
+  discountValue      Float                    @default(0)
+  finalPrice         Float
+  distance           String
+  travelTime         String
+  entranceFee        String                   @default("Free Entry")
+  location           String                   @default("Ella, Sri Lanka")
+  googleMapsUrl      String?
+  includedServices   String[]                 @default(["Tuk Tuk Pickup & Drop-off", "Experienced English-Speaking Driver", "Scenic Photo Stops", "Wait Time Included"])
+  highlights         String[]                 @default([])
+  bestTimeToVisit    String?                  @default("6:00 AM - 5:00 PM")
+  popular            Boolean                  @default(false)
+  featured           Boolean                  @default(false)
+  active             Boolean                  @default(true)
+  seoTitle           String?
+  seoDescription     String?
+  createdAt          DateTime                 @default(now())
+  updatedAt          DateTime                 @updatedAt
+  images             DestinationImage[]
+  packageLinks       TourPackageDestination[]
+  bookings           Booking[]
+  bookingItems       BookingItem[]
+  reviews            CustomerReview[]
+
+  @@index([slug])
+  @@index([categoryId])
+  @@index([popular, featured, active])
+}
+
+model DestinationImage {
+  id            String      @id @default(cuid())
+  destinationId String
+  destination   Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
+  url           String
+  altText       String?
+  caption       String?
+  sortOrder     Int         @default(0)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  @@index([destinationId])
+}
+
+model TourPackage {
+  id               String                   @id @default(cuid())
+  name             String
+  slug             String                   @unique
+  tagline          String
+  shortDescription String
+  description      String                   @db.Text
+  coverImage       String
+  gallery          String[]                 @default([])
+  duration         String
+  startTime        String                   @default("08:00 AM")
+  endTime          String                   @default("04:00 PM")
+  minPassengers    Int                      @default(1)
+  maxPassengers    Int                      @default(3)
+  price            Float
+  currency         String                   @default("USD")
+  discountType     DiscountType             @default(NONE)
+  discountValue    Float                    @default(0)
+  finalPrice       Float
+  itinerary        Json                     @default("[]")
+  inclusions       String[]                 @default([])
+  exclusions       String[]                 @default([])
+  terms            String?                  @db.Text
+  popular          Boolean                  @default(false)
+  featured         Boolean                  @default(false)
+  active           Boolean                  @default(true)
+  seoTitle         String?
+  seoDescription   String?
+  createdAt        DateTime                 @default(now())
+  updatedAt        DateTime                 @updatedAt
+  destinations     TourPackageDestination[]
+  bookings         Booking[]
+  bookingItems     BookingItem[]
+  reviews          CustomerReview[]
+
+  @@index([slug])
+  @@index([featured, active])
+}
+
+model TourPackageDestination {
+  id            String      @id @default(cuid())
+  tourPackageId String
+  destinationId String
+  stopOrder     Int         @default(1)
+  stopDuration  String?     @default("45 mins")
+  notes         String?
+  tourPackage   TourPackage @relation(fields: [tourPackageId], references: [id], onDelete: Cascade)
+  destination   Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
+  createdAt     DateTime    @default(now())
+
+  @@unique([tourPackageId, destinationId])
+  @@index([tourPackageId])
+  @@index([destinationId])
+}
+
+model Offer {
+  id                     String       @id @default(cuid())
+  title                  String
+  slug                   String       @unique
+  description            String       @db.Text
+  badgeText              String?
+  image                  String
+  offerType              OfferType    @default(SEASONAL_OFFER)
+  discountType           DiscountType @default(PERCENTAGE)
+  discountValue          Float
+  couponCode             String?
+  startDate              DateTime
+  endDate                DateTime
+  minBookingAmount       Float        @default(0)
+  maxDiscount            Float?
+  applicableDestinations String[]     @default([])
+  applicablePackages     String[]     @default([])
+  usageLimit             Int?
+  perCustomerLimit       Int          @default(1)
+  usedCount              Int          @default(0)
+  featured               Boolean      @default(true)
+  active                 Boolean      @default(true)
+  createdAt              DateTime     @default(now())
+  updatedAt              DateTime     @updatedAt
+
+  @@index([slug])
+  @@index([active, endDate])
+}
+
+model Coupon {
+  id                     String        @id @default(cuid())
+  code                   String        @unique
+  title                  String
+  description            String?
+  discountType           DiscountType  @default(PERCENTAGE)
+  discountValue          Float
+  minBookingAmount       Float         @default(0)
+  maxDiscount            Float?
+  startDate              DateTime
+  endDate                DateTime
+  usageLimit             Int?
+  perCustomerLimit       Int           @default(1)
+  usedCount              Int           @default(0)
+  firstBookingOnly       Boolean       @default(false)
+  applicableDestinations String[]      @default([])
+  applicablePackages     String[]      @default([])
+  active                 Boolean       @default(true)
+  createdAt              DateTime      @default(now())
+  updatedAt              DateTime      @updatedAt
+  usages                 CouponUsage[]
+  bookings               Booking[]
+
+  @@index([code])
+  @@index([active, endDate])
+}
+
+model CouponUsage {
+  id             String   @id @default(cuid())
+  couponId       String
+  coupon         Coupon   @relation(fields: [couponId], references: [id], onDelete: Cascade)
+  bookingId      String
+  booking        Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  customerEmail  String
+  discountAmount Float
+  usedAt         DateTime @default(now())
+
+  @@unique([couponId, bookingId])
+  @@index([couponId, customerEmail])
+}
+
+model Customer {
+  id            String    @id @default(cuid())
+  fullName      String
+  email         String    @unique
+  phone         String
+  country       String
+  totalBookings Int       @default(0)
+  totalSpent    Float     @default(0)
+  notes         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  bookings      Booking[]
+
+  @@index([email])
+}
+
+model Booking {
+  id                 String        @id @default(cuid())
+  bookingReference   String        @unique
+  bookingType        BookingType   @default(DESTINATION_RIDE)
+  status             BookingStatus @default(PENDING)
+  customerId         String
+  customer           Customer      @relation(fields: [customerId], references: [id], onDelete: Restrict)
+  destinationId      String?
+  destination        Destination?  @relation(fields: [destinationId], references: [id], onDelete: SetNull)
+  tourPackageId      String?
+  tourPackage        TourPackage?  @relation(fields: [tourPackageId], references: [id], onDelete: SetNull)
+  customTitle        String?
+  customerName       String
+  customerEmail      String
+  customerPhone      String
+  customerCountry    String
+  passengers         Int           @default(2)
+  bookingDate        DateTime
+  bookingTime        String
+  pickupLocation     String
+  dropoffLocation    String?
+  hotelName          String?
+  specialRequests    String?       @db.Text
+  currency           String        @default("USD")
+  basePrice          Float
+  additionalCharges  Float         @default(0)
+  itemDiscount       Float         @default(0)
+  couponId           String?
+  coupon             Coupon?       @relation(fields: [couponId], references: [id], onDelete: SetNull)
+  couponCode         String?
+  couponDiscount     Float         @default(0)
+  totalPrice         Float
+  adminNotes         String?       @db.Text
+  driverAssigned     String?
+  vehicleNumber      String?
+  confirmedAt        DateTime?
+  completedAt        DateTime?
+  cancelledAt        DateTime?
+  rejectedAt         DateTime?
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+  items              BookingItem[]
+  couponUsages       CouponUsage[]
+
+  @@index([bookingReference])
+  @@index([customerEmail])
+  @@index([status])
+  @@index([bookingDate])
+}
+
+model BookingItem {
+  id            String       @id @default(cuid())
+  bookingId     String
+  booking       Booking      @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  itemType      String
+  title         String
+  destinationId String?
+  destination   Destination? @relation(fields: [destinationId], references: [id], onDelete: SetNull)
+  tourPackageId String?
+  tourPackage   TourPackage? @relation(fields: [tourPackageId], references: [id], onDelete: SetNull)
+  quantity      Int          @default(1)
+  unitPrice     Float
+  discount      Float        @default(0)
+  totalPrice    Float
+  createdAt     DateTime     @default(now())
+
+  @@index([bookingId])
+}
+
+model CustomerReview {
+  id               String       @id @default(cuid())
+  customerName     String
+  customerEmail    String?
+  country          String
+  avatar           String?
+  rating           Int          @default(5)
+  title            String?
+  comment          String       @db.Text
+  bookingReference String?
+  tourTitle        String?
+  destinationId    String?
+  destination      Destination? @relation(fields: [destinationId], references: [id], onDelete: SetNull)
+  tourPackageId    String?
+  tourPackage      TourPackage? @relation(fields: [tourPackageId], references: [id], onDelete: SetNull)
+  photos           String[]     @default([])
+  status           ReviewStatus @default(PENDING)
+  featured         Boolean      @default(false)
+  travelDate       String?
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+
+  @@index([status, featured])
+}
+
+model GalleryCategory {
+  id          String         @id @default(cuid())
+  name        String         @unique
+  slug        String         @unique
+  description String?
+  sortOrder   Int            @default(0)
+  active      Boolean        @default(true)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  images      GalleryImage[]
+}
+
+model GalleryImage {
+  id          String          @id @default(cuid())
+  title       String
+  description String?
+  mediaType   String          @default("IMAGE")
+  url         String
+  thumbnail   String?
+  categoryId  String
+  category    GalleryCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  location    String?         @default("Ella, Sri Lanka")
+  featured    Boolean         @default(false)
+  visible     Boolean         @default(true)
+  sortOrder   Int             @default(0)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  @@index([categoryId])
+  @@index([visible, featured])
+}
+
+model ContactMessage {
+  id         String    @id @default(cuid())
+  name       String
+  email      String
+  phone      String?
+  subject    String
+  message    String    @db.Text
+  status     String    @default("UNREAD")
+  adminReply String?   @db.Text
+  repliedAt  DateTime?
+  ipAddress  String?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  @@index([status])
+  @@index([createdAt])
+}
+
+model EmailTemplate {
+  id          String   @id @default(cuid())
+  key         String   @unique
+  name        String
+  subject     String
+  heading     String
+  bodyIntro   String   @db.Text
+  footerNote  String   @db.Text
+  ctaText     String?
+  active      Boolean  @default(true)
+  updatedAt   DateTime @updatedAt
+  createdAt   DateTime @default(now())
+}
+
+model SiteSettings {
+  id                  String   @id @default("default")
+  businessName        String   @default("Kavith Tuk Tuk Service")
+  tagline             String   @default("Explore Ella. Experience More.")
+  heroHeadline        String   @default("Explore Ella. Experience More.")
+  heroSubheadline     String   @default("Discover breathtaking views, hidden waterfalls and unforgettable adventures with our trusted local Tuk Tuk service.")
+  heroBackgroundImage String   @default("https://images.unsplash.com/photo-1586861635167-e5223aadc9fe?auto=format&fit=crop&w=2000&q=85")
+  phone               String   @default("0785089432")
+  whatsapp            String   @default("+94785089432")
+  email               String   @default("Kavithsasalanka@gmail.com")
+  address             String   @default("Main Street, Near Railway Station, Ella 90090, Sri Lanka")
+  googleMapsEmbed     String?
+  currency            String   @default("USD")
+  exchangeRateLkr     Float    @default(305)
+  airportTransferRate Float    @default(95)
+  hotelPickupRate     Float    @default(8)
+  trainPickupRate     Float    @default(5)
+  customTourHourly    Float    @default(12)
+  facebookUrl         String?  @default("https://facebook.com/ellatuktuktaxiservice")
+  instagramUrl        String?  @default("https://instagram.com/ellatuktuktaxiservice")
+  tripadvisorUrl      String?  @default("https://tripadvisor.com")
+  youtubeUrl          String?
+  aboutHeadline       String   @default("Born in the Misty Hills of Ella, Driven by Local Hospitality")
+  aboutStory          String   @db.Text
+  aboutMission        String   @db.Text
+  aboutImage          String   @default("https://images.unsplash.com/photo-1546708973-b339540b5162?auto=format&fit=crop&w=1400&q=85")
+  faqs                Json     @default("[]")
+  seoTitle            String   @default("Ella Tuk Tuk Taxi Service | #1 Local Tours & Tuk Tuk Booking in Ella, Sri Lanka")
+  seoDescription      String   @default("Book authentic Tuk Tuk tours, Nine Arch Bridge rides, waterfall adventures, and Sri Lanka transfers with Ella Tuk Tuk Taxi Service. Transparent pricing & trusted local drivers.")
+  seoKeywords         String   @default("Ella Tuk Tuk, Ella Taxi Service, Nine Arch Bridge Tuk Tuk, Little Adams Peak Tour, Diyaluma Falls Tour, Sri Lanka Tuk Tuk Safari")
+  updatedAt           DateTime @updatedAt
+}
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  userId     String?
+  user       User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  userEmail  String?
+  action     String
+  entityType String
+  entityId   String?
+  details    String?  @db.Text
+  ipAddress  String?
+  createdAt  DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([entityType])
+}
+
