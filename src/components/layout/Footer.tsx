@@ -1,15 +1,12 @@
 import React from "react";
 import Link from "next/link";
 import {
-  Compass,
+  Mountain,
   Phone,
   Mail,
   MapPin,
-  MessageCircle,
-  ShieldCheck,
-  Clock,
-  Award,
-  ArrowUpRight
+  Send,
+  ShieldCheck
 } from "lucide-react";
 
 export function Footer({
@@ -29,83 +26,84 @@ export function Footer({
   const phone = settings?.phone || "0785089432";
   const whatsapp = (settings?.whatsapp || "+94785089432").replace(/[^0-9]/g, "");
   const email = settings?.email || "Kavithsasalanka@gmail.com";
-  const address =
-    settings?.address || "Main Street, Near Railway Station, Ella 90090, Sri Lanka";
+  const address = settings?.address || "Ella, Sri Lanka";
 
   return (
-    <footer className="bg-brand-deep text-brand-cream border-t border-white/10 mt-auto">
-      {/* Upper Highlight Bar */}
-      <div className="border-b border-white/10 bg-brand-forest/50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="flex items-center gap-3.5">
-            <div className="w-11 h-11 rounded-2xl bg-brand-gold/15 border border-brand-gold/30 flex items-center justify-center text-brand-gold shrink-0">
-              <Clock className="w-5 h-5" />
+    <footer className="bg-[#0B3024] text-white mt-auto">
+      {/* Top Newsletter Banner matching mockup */}
+      <div className="bg-[#164B35] border-b border-white/10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-2xl bg-[#E8B44C]/20 border border-[#E8B44C]/40 flex items-center justify-center text-[#E8B44C] shrink-0">
+              <Mail className="w-6 h-6" />
             </div>
             <div>
-              <p className="text-sm font-bold text-white">24/7 Highland Dispatch</p>
-              <p className="text-xs text-brand-cream/75">
-                5:00 AM Sunrise Rides & Late Train Pickups
+              <h3 className="font-serif text-xl sm:text-2xl font-bold text-white">
+                Get Travel Deals & Updates
+              </h3>
+              <p className="text-xs sm:text-sm text-white/75 mt-0.5">
+                Subscribe to our newsletter and be the first to know about new tours,
+                special offers and travel tips.
               </p>
             </div>
           </div>
-          <div className="flex items-center gap-3.5">
-            <div className="w-11 h-11 rounded-2xl bg-brand-gold/15 border border-brand-gold/30 flex items-center justify-center text-brand-gold shrink-0">
-              <Award className="w-5 h-5" />
-            </div>
-            <div>
-              <p className="text-sm font-bold text-white">100% Local Ella Drivers</p>
-              <p className="text-xs text-brand-cream/75">
-                English-Speaking, Insured & Community Owned
-              </p>
-            </div>
-          </div>
-          <div className="flex items-center gap-3.5">
-            <div className="w-11 h-11 rounded-2xl bg-brand-gold/15 border border-brand-gold/30 flex items-center justify-center text-brand-gold shrink-0">
-              <MessageCircle className="w-5 h-5" />
-            </div>
-            <div>
-              <p className="text-sm font-bold text-white">Instant WhatsApp Support</p>
-              <a
-                href={`https://wa.me/${whatsapp}`}
-                target="_blank"
-                rel="noreferrer"
-                className="text-xs text-brand-gold hover:underline flex items-center gap-1"
-              >
-                Chat directly with our Ella desk <ArrowUpRight className="w-3 h-3" />
-              </a>
-            </div>
-          </div>
+
+          <form
+            action="/contact"
+            className="w-full md:w-auto flex items-center bg-white rounded-full p-1.5 pl-4 shadow-md min-w-[300px] sm:min-w-[360px]"
+          >
+            <input
+              type="email"
+              placeholder="Enter your email address"
+              className="flex-1 bg-transparent text-xs sm:text-sm text-[#202820] focus:outline-none"
+            />
+            <button
+              type="submit"
+              className="w-10 h-10 rounded-full bg-[#E8B44C] hover:bg-[#f3c15a] text-[#0B3024] flex items-center justify-center shrink-0 transition"
+              aria-label="Subscribe"
+            >
+              <Send className="w-4 h-4" />
+            </button>
+          </form>
         </div>
       </div>
 
-      {/* Main Footer Grid */}
+      {/* Main 4-Column Footer */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
         {/* Col 1: Brand */}
         <div className="space-y-4">
-          <Link href="/" className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-brand-gold flex items-center justify-center text-brand-deep">
-              <Compass className="w-5 h-5 stroke-[2.2]" />
+          <Link href="/" className="flex items-center gap-2.5">
+            <div className="w-10 h-10 rounded-xl bg-[#164B35] border border-[#E8B44C]/40 flex items-center justify-center text-[#E8B44C]">
+              <Mountain className="w-5 h-5 stroke-[2.3]" />
             </div>
             <div>
               <span className="block font-serif text-xl font-bold text-white leading-none">
-                Kavith Tuk Tuk
+                Kavith <span className="text-[#E8B44C]">Tuk Tuk</span>
               </span>
-              <span className="block text-[10px] uppercase tracking-[0.2em] text-brand-gold font-semibold mt-1">
-                Service • Ella Sri Lanka
+              <span className="block text-[9px] uppercase tracking-[0.22em] text-white/70 font-semibold mt-0.5">
+                ELLA • SRI LANKA
               </span>
             </div>
           </Link>
-          <p className="text-sm text-brand-cream/80 leading-relaxed">
-            Discover breathtaking mountain views, colonial railway bridges, hidden waterfalls,
-            and emerald tea estates with Ella&apos;s most trusted local Tuk Tuk fleet.
+          <p className="text-xs sm:text-sm text-white/75 leading-relaxed">
+            Explore Sri Lanka with trusted tour packages, local experiences and
+            unforgettable journeys across Ella&apos;s misty mountains and waterfalls.
           </p>
-          <div className="flex items-center gap-2.5 pt-2">
+          <div className="flex items-center gap-2.5 pt-1">
+            <a
+              href={`https://wa.me/${whatsapp}`}
+              target="_blank"
+              rel="noreferrer"
+              className="px-3 py-1.5 rounded-full bg-white/10 hover:bg-[#E8B44C] hover:text-[#0B3024] text-xs font-semibold transition"
+            >
+              WhatsApp
+            </a>
             {settings?.facebookUrl && (
               <a
                 href={settings.facebookUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-brand-gold hover:text-brand-deep text-xs font-semibold transition"
+                className="px-3 py-1.5 rounded-full bg-white/10 hover:bg-[#E8B44C] hover:text-[#0B3024] text-xs font-semibold transition"
               >
                 Facebook
               </a>
@@ -115,58 +113,46 @@ export function Footer({
                 href={settings.instagramUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-brand-gold hover:text-brand-deep text-xs font-semibold transition"
+                className="px-3 py-1.5 rounded-full bg-white/10 hover:bg-[#E8B44C] hover:text-[#0B3024] text-xs font-semibold transition"
               >
                 Instagram
-              </a>
-            )}
-            {settings?.tripadvisorUrl && (
-              <a
-                href={settings.tripadvisorUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-brand-gold hover:text-brand-deep text-xs font-semibold transition"
-              >
-                TripAdvisor
               </a>
             )}
           </div>
         </div>
 
-        {/* Col 2: Quick Navigation */}
+        {/* Col 2: Quick Links */}
         <div>
-          <h3 className="text-sm font-bold uppercase tracking-wider text-brand-gold mb-4">
-            Explore & Book
-          </h3>
-          <ul className="space-y-2.5 text-sm text-brand-cream/80">
+          <h4 className="text-sm font-bold text-white mb-4">Quick Links</h4>
+          <ul className="space-y-2.5 text-xs sm:text-sm text-white/75">
             <li>
-              <Link href="/destinations" className="hover:text-brand-gold transition">
-                All Ella Destinations
+              <Link href="/" className="hover:text-[#E8B44C] transition">
+                Home
               </Link>
             </li>
             <li>
-              <Link href="/tours" className="hover:text-brand-gold transition">
-                Curated Tour Packages
+              <Link href="/destinations" className="hover:text-[#E8B44C] transition">
+                Destinations
               </Link>
             </li>
             <li>
-              <Link href="/offers" className="hover:text-brand-gold transition">
-                Special Offers & Coupons
+              <Link href="/tours" className="hover:text-[#E8B44C] transition">
+                Tours
               </Link>
             </li>
             <li>
-              <Link href="/book" className="hover:text-brand-gold transition">
-                Online Booking Engine
+              <Link href="/offers" className="hover:text-[#E8B44C] transition">
+                Offers
               </Link>
             </li>
             <li>
-              <Link href="/track-booking" className="hover:text-brand-gold transition">
-                Track Existing Booking
+              <Link href="/about" className="hover:text-[#E8B44C] transition">
+                About Us
               </Link>
             </li>
             <li>
-              <Link href="/gallery" className="hover:text-brand-gold transition">
-                Traveler Photo Gallery
+              <Link href="/contact" className="hover:text-[#E8B44C] transition">
+                Contact
               </Link>
             </li>
           </ul>
@@ -174,99 +160,79 @@ export function Footer({
 
         {/* Col 3: Popular Destinations */}
         <div>
-          <h3 className="text-sm font-bold uppercase tracking-wider text-brand-gold mb-4">
-            Top Highland Stops
-          </h3>
-          <ul className="space-y-2.5 text-sm text-brand-cream/80">
+          <h4 className="text-sm font-bold text-white mb-4">Popular Destinations</h4>
+          <ul className="space-y-2.5 text-xs sm:text-sm text-white/75">
             <li>
-              <Link href="/destinations/nine-arch-bridge" className="hover:text-brand-gold transition">
-                Nine Arch Bridge Train Tour
+              <Link href="/destinations/nine-arch-bridge" className="hover:text-[#E8B44C] transition">
+                Nine Arches Bridge
               </Link>
             </li>
             <li>
-              <Link href="/destinations/little-adams-peak" className="hover:text-brand-gold transition">
-                Little Adam&apos;s Peak Sunrise
+              <Link href="/destinations/ravana-falls" className="hover:text-[#E8B44C] transition">
+                Ravana Falls
               </Link>
             </li>
             <li>
-              <Link href="/destinations/diyaluma-falls" className="hover:text-brand-gold transition">
-                Upper Diyaluma Infinity Pools
+              <Link href="/destinations/little-adams-peak" className="hover:text-[#E8B44C] transition">
+                Little Adam&apos;s Peak
               </Link>
             </li>
             <li>
-              <Link href="/destinations/liptons-seat" className="hover:text-brand-gold transition">
-                Lipton&apos;s Seat & Dambatenne
+              <Link href="/destinations/diyaluma-falls" className="hover:text-[#E8B44C] transition">
+                Diyaluma Falls
               </Link>
             </li>
             <li>
-              <Link href="/destinations/ella-rock" className="hover:text-brand-gold transition">
-                Ella Rock Trailhead Transfer
-              </Link>
-            </li>
-            <li>
-              <Link href="/destinations/halpe-tea-factory" className="hover:text-brand-gold transition">
-                Uva Halpe Tea Factory Tour
+              <Link href="/destinations/liptons-seat" className="hover:text-[#E8B44C] transition">
+                Lipton&apos;s Seat
               </Link>
             </li>
           </ul>
         </div>
 
-        {/* Col 4: Contact Info */}
+        {/* Col 4: Contact Us */}
         <div>
-          <h3 className="text-sm font-bold uppercase tracking-wider text-brand-gold mb-4">
-            Contact Our Ella Desk
-          </h3>
-          <ul className="space-y-3.5 text-sm text-brand-cream/85">
-            <li className="flex items-start gap-3">
-              <MapPin className="w-4 h-4 text-brand-gold shrink-0 mt-1" />
-              <span>{address}</span>
-            </li>
-            <li className="flex items-center gap-3">
-              <Phone className="w-4 h-4 text-brand-gold shrink-0" />
-              <a href={`tel:${phone}`} className="hover:text-brand-gold">
+          <h4 className="text-sm font-bold text-white mb-4">Contact Us</h4>
+          <ul className="space-y-3 text-xs sm:text-sm text-white/80">
+            <li className="flex items-center gap-2.5">
+              <Phone className="w-4 h-4 text-[#E8B44C] shrink-0" />
+              <a href={`tel:${phone}`} className="hover:text-[#E8B44C]">
                 {phone}
               </a>
             </li>
-            <li className="flex items-center gap-3">
-              <MessageCircle className="w-4 h-4 text-brand-gold shrink-0" />
-              <a
-                href={`https://wa.me/${whatsapp}`}
-                target="_blank"
-                rel="noreferrer"
-                className="hover:text-brand-gold"
-              >
-                WhatsApp: {phone}
-              </a>
-            </li>
-            <li className="flex items-center gap-3">
-              <Mail className="w-4 h-4 text-brand-gold shrink-0" />
-              <a href={`mailto:${email}`} className="hover:text-brand-gold break-all">
+            <li className="flex items-center gap-2.5">
+              <Mail className="w-4 h-4 text-[#E8B44C] shrink-0" />
+              <a href={`mailto:${email}`} className="hover:text-[#E8B44C] break-all">
                 {email}
               </a>
+            </li>
+            <li className="flex items-start gap-2.5">
+              <MapPin className="w-4 h-4 text-[#E8B44C] shrink-0 mt-0.5" />
+              <span>{address}</span>
             </li>
           </ul>
         </div>
       </div>
 
-      {/* Bottom Legal & Admin Link */}
+      {/* Bottom Legal Bar */}
       <div className="border-t border-white/10 bg-black/20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-brand-cream/65">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-white/60">
           <p>
-            © {new Date().getFullYear()} {settings?.businessName || "Kavith Tuk Tuk Service"}. All rights reserved.
+            © {new Date().getFullYear()} {settings?.businessName || "Kavith Tuk Tuk Service"}. All Rights Reserved.
           </p>
-          <div className="flex flex-wrap items-center gap-5">
-            <Link href="/about" className="hover:text-brand-gold transition">
-              About Us
+          <div className="flex items-center gap-5">
+            <Link href="/contact" className="hover:text-[#E8B44C]">
+              Privacy Policy
             </Link>
-            <Link href="/contact" className="hover:text-brand-gold transition">
-              Privacy & Terms
+            <Link href="/contact" className="hover:text-[#E8B44C]">
+              Terms & Conditions
             </Link>
             <Link
               href="/admin"
-              className="flex items-center gap-1.5 text-brand-gold hover:underline font-medium"
+              className="text-[#E8B44C] hover:underline font-semibold flex items-center gap-1"
             >
               <ShieldCheck className="w-3.5 h-3.5" />
-              Admin Dashboard
+              Admin Panel
             </Link>
           </div>
         </div>
@@ -274,4 +240,3 @@ export function Footer({
     </footer>
   );
 }
-
