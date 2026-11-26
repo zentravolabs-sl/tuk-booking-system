@@ -106,6 +106,13 @@ export default async function AdminDashboardPage() {
 
           <div className="flex flex-wrap items-center gap-2.5">
             <Link
+              href="/admin/rides"
+              className="px-4 py-2.5 rounded-xl bg-brand-forest hover:bg-brand-deep text-white text-xs font-bold flex items-center gap-1.5 shadow-sm transition"
+            >
+              <Plus className="w-3.5 h-3.5 text-brand-gold" />
+              Add Ride
+            </Link>
+            <Link
               href="/admin/destinations"
               className="px-4 py-2.5 rounded-xl bg-brand-forest hover:bg-brand-deep text-white text-xs font-bold flex items-center gap-1.5 shadow-sm transition"
             >

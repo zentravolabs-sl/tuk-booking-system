@@ -171,3 +171,68 @@ export const reviewSubmissionSchema = z.object({
   destinationId: z.string().optional().nullable(),
   tourPackageId: z.string().optional().nullable()
 });
+
+export const rideFormSchema = z.object({
+  id: z.string().optional(),
+  name: z.string().min(2, "Ride name is required"),
+  slug: z.string().optional(),
+  shortDescription: z.string().optional().nullable(),
+  image: imageUrlOrPath,
+  priceUsd: z.coerce.number().min(0.5, "USD price is required"),
+  priceLkr: z.coerce.number().min(100, "Rs (LKR) price is required"),
+  tag: z.string().min(2, "Tag is required"),
+  distance: z.string().optional().nullable(),
+  travelTime: z.string().optional().nullable(),
+  sortOrder: z.coerce.number().int().default(0),
+  active: z.boolean().default(true)
+});
+
+export const rideBookingModalSchema = z.object({
+  rideId: z.string().optional().nullable(),
+  selectedDestination: z.string().min(2, "Selected destination is required"),
+  priceUsd: z.coerce.number().optional().default(0),
+  priceLkr: z.coerce.number().optional().default(0),
+  customerName: z.string().min(2, "Please enter your name"),
+  whatsappNumber: z.string().min(6, "Please enter your WhatsApp number"),
+  customerEmail: z.string().email("Please enter a valid email address"),
+  pickupDate: z.string().min(1, "Please select a pick-up date"),
+  pickupTime: z.string().min(1, "Please select a pick-up time"),
+  passengers: z.coerce
+    .number()
+    .int()
+    .min(1, "At least 1 passenger is required")
+    .max(20, "Maximum 20 passengers")
+});
+
+export type RideBookingModalValues = z.infer<typeof rideBookingModalSchema>;
+
+export const customerRegistrationSchema = z.object({
+  fullName: z.string().min(2, "Please enter your full name"),
+  email: z.string().email("Please enter a valid email address"),
+  phone: z
+    .string()
+    .min(6, "Please enter your phone or WhatsApp number")
+    .optional()
+    .or(z.literal("")),
+  country: z
+    .string()
+    .min(2, "Please enter your country")
+    .optional()
+    .or(z.literal(""))
+});
+
+export type CustomerRegistrationValues = z.infer<typeof customerRegistrationSchema>;
+
+export const customerOtpVerifySchema = z.object({
+  email: z.string().email("Valid email address is required"),
+  otp: z
+    .string()
+    .trim()
+    .regex(/^\d{6}$/, "Please enter a valid 6-digit OTP code")
+});
+
+export const customerLoginOtpRequestSchema = z.object({
+  email: z.string().email("Please enter a valid email address")
+});
+
+

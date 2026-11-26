@@ -10,6 +10,7 @@ import {
   LayoutDashboard,
   CalendarCheck,
   MapPin,
+  CarFront,
   Package,
   Tag,
   Image as ImageIcon,
@@ -30,17 +31,15 @@ import {
 const navItems = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
   { href: "/admin/bookings", label: "Bookings", icon: CalendarCheck },
-  { href: "/admin/destinations", label: "Destinations", icon: MapPin },
+  { href: "/admin/rides", label: "Our Rides", icon: CarFront },
   { href: "/admin/tours", label: "Tour Packages", icon: Package },
   { href: "/admin/offers", label: "Offers & Coupons", icon: Tag },
   { href: "/admin/gallery", label: "Gallery", icon: ImageIcon },
   { href: "/admin/reviews", label: "Reviews", icon: Star },
   { href: "/admin/customers", label: "Customers", icon: Users },
-  { href: "/admin/messages", label: "Contact Messages", icon: MessageSquare },
   { href: "/admin/content", label: "Website Content", icon: FileText },
   { href: "/admin/email-templates", label: "Email Templates", icon: Mail },
-  { href: "/admin/settings", label: "Settings", icon: Settings },
-  { href: "/admin/audit-logs", label: "Audit Logs", icon: ShieldAlert }
+  { href: "/admin/settings", label: "Settings", icon: Settings }
 ];
 
 export function AdminShell({

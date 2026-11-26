@@ -3,10 +3,12 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
+import { getCurrentCustomer } from "@/lib/customer-auth";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { DiscountBadge } from "@/components/tourism/Cards";
 import { ReviewCard } from "@/components/tourism/InteractiveWidgets";
+import { TourPackageBookingModalClient } from "@/components/tourism/TourPackageBookingModalClient";
 import { formatCurrency } from "@/lib/utils";
 import {
   Clock,
@@ -60,7 +62,26 @@ export default async function TourPackageDetailPage({
     notFound();
   }
 
-  const settings = await prisma.siteSettings.findUnique({ where: { id: "default" } });
+  const [settings, currentCustomer] = await Promise.all([
+    prisma.siteSettings.findUnique({ where: { id: "default" } }),
+    getCurrentCustomer()
+  ]);
+
+  const customerPrefill = currentCustomer
+    ? {
+        id: currentCustomer.id,
+        fullName: currentCustomer.fullName,
+        email: currentCustomer.email,
+        phone:
+          currentCustomer.phone && currentCustomer.phone !== "Not provided"
+            ? currentCustomer.phone
+            : "",
+        country:
+          currentCustomer.country && currentCustomer.country !== "International"
+            ? currentCustomer.country
+            : ""
+      }
+    : null;
   const itinerary = Array.isArray(pkg.itinerary)
     ? (pkg.itinerary as Array<{ time: string; title: string; description: string }>)
     : [];
@@ -203,18 +224,17 @@ export default async function TourPackageDetailPage({
             </div>
           )}
 
-          {/* Included Destinations */}
+          {/* Included Stops */}
           {pkg.destinations.length > 0 && (
             <div className="bg-white rounded-3xl p-7 sm:p-8 border border-brand-forest/10 shadow-card">
               <h2 className="font-serif text-2xl font-bold text-brand-dark mb-5">
-                Included Destinations on This Package
+                Included Stops on This Package
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {pkg.destinations.map((item) => (
-                  <Link
+                  <div
                     key={item.id}
-                    href={`/destinations/${item.destination.slug}`}
-                    className="flex items-center gap-3.5 p-3.5 rounded-2xl bg-brand-cream/60 border border-brand-forest/10 hover:border-brand-forest transition group"
+                    className="flex items-center gap-3.5 p-3.5 rounded-2xl bg-brand-cream/60 border border-brand-forest/10"
                   >
                     <img
                       src={item.destination.coverImage}
@@ -225,14 +245,14 @@ export default async function TourPackageDetailPage({
                       <span className="text-[11px] font-bold uppercase text-brand-forest">
                         Stop #{item.stopOrder}
                       </span>
-                      <h4 className="font-serif font-bold text-brand-dark group-hover:text-brand-forest">
+                      <h4 className="font-serif font-bold text-brand-dark">
                         {item.destination.name}
                       </h4>
                       <p className="text-xs text-brand-dark/65">
                         {item.destination.distance}
                       </p>
                     </div>
-                  </Link>
+                  </div>
                 ))}
               </div>
             </div>
@@ -331,13 +351,17 @@ export default async function TourPackageDetailPage({
               </li>
             </ul>
 
-            <Link
-              href={`/book?type=TOUR_PACKAGE&tourPackageId=${pkg.id}`}
-              className="w-full py-4 px-6 rounded-2xl bg-brand-gold hover:bg-[#f3c15a] text-brand-deep font-extrabold text-sm shadow-md hover:shadow-lg transition flex items-center justify-center gap-2"
-            >
-              <span>Reserve This Tour Package</span>
-              <ArrowRight className="w-4 h-4" />
-            </Link>
+            <TourPackageBookingModalClient
+              pkg={{
+                id: pkg.id,
+                name: pkg.name,
+                finalPrice: pkg.finalPrice,
+                currency: pkg.currency,
+                startTime: pkg.startTime,
+                maxPassengers: pkg.maxPassengers
+              }}
+              initialCustomer={customerPrefill}
+            />
           </div>
         </div>
       </section>

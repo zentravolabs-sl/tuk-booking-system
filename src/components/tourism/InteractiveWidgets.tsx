@@ -107,11 +107,7 @@ export function OfferCard({
           )}
 
           <Link
-            href={
-              offer.couponCode
-                ? `/book?coupon=${encodeURIComponent(offer.couponCode)}`
-                : "/book"
-            }
+            href="/#our-rides"
             className="bg-brand-gold hover:bg-[#f3c15a] text-brand-deep font-bold text-xs px-4 py-2.5 rounded-xl flex items-center gap-1.5 transition shadow-sm"
           >
             <span>Redeem Offer</span>

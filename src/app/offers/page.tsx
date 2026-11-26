@@ -116,7 +116,7 @@ export default async function OffersPage() {
                     Min Booking: <strong>${coupon.minBookingAmount}</strong>
                   </span>
                   <Link
-                    href={`/book?coupon=${encodeURIComponent(coupon.code)}`}
+                    href="/#our-rides"
                     className="font-bold text-brand-forest hover:text-brand-deep flex items-center gap-1"
                   >
                     <span>Use Code</span>
@@ -137,16 +137,16 @@ export default async function OffersPage() {
                 100% Server-Verified Discount Guarantee
               </h3>
               <p className="text-xs text-brand-dark/70 mt-0.5">
-                All destination discounts and coupon codes are calculated automatically on
+                All promotional discounts and coupon codes are calculated automatically on
                 our secure booking server before you submit your reservation.
               </p>
             </div>
           </div>
           <Link
-            href="/book"
+            href="/#our-rides"
             className="px-6 py-3 rounded-xl bg-brand-forest text-white text-xs font-bold shrink-0 hover:bg-brand-deep transition"
           >
-            Go to Booking Engine
+            View Our Rides
           </Link>
         </div>
       </section>

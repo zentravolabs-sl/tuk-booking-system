@@ -5,7 +5,6 @@ import {
   Phone,
   Mail,
   MapPin,
-  Send,
   ShieldCheck
 } from "lucide-react";
 
@@ -30,44 +29,6 @@ export function Footer({
 
   return (
     <footer className="bg-[#0B3024] text-white mt-auto">
-      {/* Top Newsletter Banner matching mockup */}
-      <div className="bg-[#164B35] border-b border-white/10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-[#E8B44C]/20 border border-[#E8B44C]/40 flex items-center justify-center text-[#E8B44C] shrink-0">
-              <Mail className="w-6 h-6" />
-            </div>
-            <div>
-              <h3 className="font-serif text-xl sm:text-2xl font-bold text-white">
-                Get Travel Deals & Updates
-              </h3>
-              <p className="text-xs sm:text-sm text-white/75 mt-0.5">
-                Subscribe to our newsletter and be the first to know about new tours,
-                special offers and travel tips.
-              </p>
-            </div>
-          </div>
-
-          <form
-            action="/contact"
-            className="w-full md:w-auto flex items-center bg-white rounded-full p-1.5 pl-4 shadow-md min-w-[300px] sm:min-w-[360px]"
-          >
-            <input
-              type="email"
-              placeholder="Enter your email address"
-              className="flex-1 bg-transparent text-xs sm:text-sm text-[#202820] focus:outline-none"
-            />
-            <button
-              type="submit"
-              className="w-10 h-10 rounded-full bg-[#E8B44C] hover:bg-[#f3c15a] text-[#0B3024] flex items-center justify-center shrink-0 transition"
-              aria-label="Subscribe"
-            >
-              <Send className="w-4 h-4" />
-            </button>
-          </form>
-        </div>
-      </div>
-
       {/* Main 4-Column Footer */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
         {/* Col 1: Brand */}
@@ -131,8 +92,8 @@ export function Footer({
               </Link>
             </li>
             <li>
-              <Link href="/destinations" className="hover:text-[#E8B44C] transition">
-                Destinations
+              <Link href="/#our-rides" className="hover:text-[#E8B44C] transition">
+                Our Rides
               </Link>
             </li>
             <li>
@@ -158,32 +119,32 @@ export function Footer({
           </ul>
         </div>
 
-        {/* Col 3: Popular Destinations */}
+        {/* Col 3: Popular Rides */}
         <div>
-          <h4 className="text-sm font-bold text-white mb-4">Popular Destinations</h4>
+          <h4 className="text-sm font-bold text-white mb-4">Popular Rides</h4>
           <ul className="space-y-2.5 text-xs sm:text-sm text-white/75">
             <li>
-              <Link href="/destinations/nine-arch-bridge" className="hover:text-[#E8B44C] transition">
+              <Link href="/#our-rides" className="hover:text-[#E8B44C] transition">
                 Nine Arches Bridge
               </Link>
             </li>
             <li>
-              <Link href="/destinations/ravana-falls" className="hover:text-[#E8B44C] transition">
+              <Link href="/#our-rides" className="hover:text-[#E8B44C] transition">
                 Ravana Falls
               </Link>
             </li>
             <li>
-              <Link href="/destinations/little-adams-peak" className="hover:text-[#E8B44C] transition">
+              <Link href="/#our-rides" className="hover:text-[#E8B44C] transition">
                 Little Adam&apos;s Peak
               </Link>
             </li>
             <li>
-              <Link href="/destinations/diyaluma-falls" className="hover:text-[#E8B44C] transition">
+              <Link href="/#our-rides" className="hover:text-[#E8B44C] transition">
                 Diyaluma Falls
               </Link>
             </li>
             <li>
-              <Link href="/destinations/liptons-seat" className="hover:text-[#E8B44C] transition">
+              <Link href="/#our-rides" className="hover:text-[#E8B44C] transition">
                 Lipton&apos;s Seat
               </Link>
             </li>

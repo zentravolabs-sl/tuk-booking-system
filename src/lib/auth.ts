@@ -100,7 +100,9 @@ export async function getCurrentAdmin(): Promise<AuthenticatedAdmin | null> {
     if (session && session.expiresAt >= new Date() && session.user.active) {
       return {
         id: session.user.id,
-        name: session.user.name,
+        name: session.user.name.includes("Nuwan Perera")
+          ? "Kavith Sasalanka"
+          : session.user.name,
         email: session.user.email,
         role: session.user.role
       };
@@ -114,9 +116,19 @@ export async function getCurrentAdmin(): Promise<AuthenticatedAdmin | null> {
   });
 
   if (defaultAdmin) {
+    if (defaultAdmin.name.includes("Nuwan Perera")) {
+      await prisma.user
+        .update({
+          where: { id: defaultAdmin.id },
+          data: { name: "Kavith Sasalanka" }
+        })
+        .catch(() => {});
+    }
     return {
       id: defaultAdmin.id,
-      name: defaultAdmin.name,
+      name: defaultAdmin.name.includes("Nuwan Perera")
+        ? "Kavith Sasalanka"
+        : defaultAdmin.name,
       email: defaultAdmin.email,
       role: AdminRole.SUPER_ADMIN
     };
@@ -124,7 +136,7 @@ export async function getCurrentAdmin(): Promise<AuthenticatedAdmin | null> {
 
   return {
     id: "kavith-owner",
-    name: "Kavith Sasalanka (Owner)",
+    name: "Kavith Sasalanka",
     email: "Kavithsasalanka@gmail.com",
     role: AdminRole.SUPER_ADMIN
   };
@@ -141,7 +153,7 @@ export async function requireAdmin(
   return (
     admin || {
       id: "kavith-owner",
-      name: "Kavith Sasalanka (Owner)",
+      name: "Kavith Sasalanka",
       email: "Kavithsasalanka@gmail.com",
       role: AdminRole.SUPER_ADMIN
     }

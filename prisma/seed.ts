@@ -13,14 +13,14 @@ async function main() {
   const superAdmin = await prisma.user.upsert({
     where: { email: "kavithsasalanka@gmail.com" },
     update: {
-      name: "Kavith Sasalanka (Owner)",
+      name: "Kavith Sasalanka",
       passwordHash: superAdminPassword,
       role: AdminRole.SUPER_ADMIN,
       active: true
     },
     create: {
       email: "kavithsasalanka@gmail.com",
-      name: "Kavith Sasalanka (Owner)",
+      name: "Kavith Sasalanka",
       passwordHash: superAdminPassword,
       role: AdminRole.SUPER_ADMIN,
       active: true
@@ -1040,7 +1040,7 @@ async function main() {
       itemDiscount: 10,
       couponDiscount: 0,
       totalPrice: 45,
-      driverAssigned: "Nuwan Perera",
+      driverAssigned: "Kavith Sasalanka",
       vehicleNumber: "UP QH-4821",
       confirmedAt: new Date(now.getTime() - 4 * 24 * 60 * 60 * 1000),
       completedAt: new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000)
@@ -1158,6 +1158,96 @@ async function main() {
       where: { key: tpl.key },
       update: tpl,
       create: tpl
+    });
+  }
+
+  // 10B. Our Rides (Home Page Section)
+  const ridesData = [
+    {
+      name: "Nine Arch Bridge & Forest Viewpoint Ride",
+      slug: "nine-arch-bridge-forest-viewpoint-ride",
+      shortDescription: "Direct Tuk Tuk ride to the secret upper tea ridge viewpoint timed with the iconic Blue Mountain Train crossing.",
+      image: "https://images.unsplash.com/photo-1586861635167-e5223aadc9fe?auto=format&fit=crop&w=1400&q=85",
+      priceUsd: 12,
+      priceLkr: 3600,
+      tag: "Most Popular",
+      distance: "3.5 km from Ella Town",
+      travelTime: "15 mins • 90m Wait Included",
+      sortOrder: 1,
+      active: true
+    },
+    {
+      name: "Little Adam's Peak Sunrise / Sunset Ride",
+      slug: "little-adams-peak-sunrise-sunset-ride",
+      shortDescription: "Private round-trip Tuk Tuk transfer straight to the 98 Acres trailhead for 360° Ella Gap mountain views.",
+      image: "https://images.unsplash.com/photo-1546708973-b339540b5162?auto=format&fit=crop&w=1400&q=85",
+      priceUsd: 10,
+      priceLkr: 3000,
+      tag: "Best Value",
+      distance: "2.8 km from Ella Town",
+      travelTime: "10 mins • 2h Wait Included",
+      sortOrder: 2,
+      active: true
+    },
+    {
+      name: "Upper Diyaluma Falls & Natural Infinity Pools",
+      slug: "upper-diyaluma-falls-infinity-pools-ride",
+      shortDescription: "Half-day scenic mountain Tuk Tuk ride via Poonagala tea estates to the top of Sri Lanka's 220m waterfall.",
+      image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1400&q=85",
+      priceUsd: 38,
+      priceLkr: 11500,
+      tag: "Nature & Waterfall",
+      distance: "36 km from Ella Town",
+      travelTime: "5 - 6 Hours Charter",
+      sortOrder: 3,
+      active: true
+    },
+    {
+      name: "Ravana Falls & Ella Gap Scenic Descent",
+      slug: "ravana-falls-ella-gap-scenic-ride",
+      shortDescription: "Breezy Tuk Tuk excursion down the dramatic Ella Gap mountain pass to the roaring 25m Ravana cascade.",
+      image: "https://images.unsplash.com/photo-1588598198321-9735fd52455b?auto=format&fit=crop&w=1400&q=85",
+      priceUsd: 14,
+      priceLkr: 4200,
+      tag: "Nature & Waterfall",
+      distance: "6.2 km from Ella Town",
+      travelTime: "15 mins • 60m Wait Included",
+      sortOrder: 4,
+      active: true
+    },
+    {
+      name: "Lipton's Seat Sunrise & Dambatenne Tea Ride",
+      slug: "liptons-seat-sunrise-dambatenne-ride",
+      shortDescription: "Climb through emerald century-old tea plantations to the 1,970m cloud summit overlooking five provinces.",
+      image: "https://images.unsplash.com/photo-1566296314736-6eaac1ca0cb9?auto=format&fit=crop&w=1400&q=85",
+      priceUsd: 35,
+      priceLkr: 10500,
+      tag: "Most Popular",
+      distance: "34 km from Ella Town",
+      travelTime: "Half-Day Sunrise Tour",
+      sortOrder: 5,
+      active: true
+    },
+    {
+      name: "Halpe Tea Factory & Demodara Railway Loop",
+      slug: "halpe-tea-factory-demodara-loop-ride",
+      shortDescription: "Visit the famous 360° spiral railway track at Demodara followed by fresh highland tea tasting at Halpewatte.",
+      image: "https://images.unsplash.com/photo-1597318181409-cf64d0b5d8a2?auto=format&fit=crop&w=1400&q=85",
+      priceUsd: 16,
+      priceLkr: 4800,
+      tag: "Best Value",
+      distance: "6.0 km from Ella Town",
+      travelTime: "2.5 Hours Round Trip",
+      sortOrder: 6,
+      active: true
+    }
+  ];
+
+  for (const ride of ridesData) {
+    await prisma.ride.upsert({
+      where: { slug: ride.slug },
+      update: ride,
+      create: ride
     });
   }
 

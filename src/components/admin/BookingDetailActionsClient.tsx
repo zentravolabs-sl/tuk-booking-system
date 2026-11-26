@@ -124,7 +124,7 @@ export function BookingDetailActionsClient({
             type="text"
             value={driverAssigned}
             onChange={(e) => setDriverAssigned(e.target.value)}
-            placeholder="e.g., Nuwan Perera / Kasun Bandara"
+            placeholder="e.g., Kavith Sasalanka / Kasun Bandara"
             className="w-full px-4 py-2.5 rounded-xl bg-brand-cream/60 border border-brand-forest/20 text-sm"
           />
         </div>

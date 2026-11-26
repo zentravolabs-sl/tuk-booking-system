@@ -154,7 +154,7 @@ export function HeroCarousel() {
                   Service.
                 </p>
                 <Link
-                  href="/book"
+                  href="/#our-rides"
                   onClick={() => setVideoOpen(false)}
                   className="px-6 py-3 rounded-full bg-[#E8B44C] text-[#0B3024] font-extrabold text-xs sm:text-sm"
                 >

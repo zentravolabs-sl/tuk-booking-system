@@ -88,10 +88,10 @@ export default async function ToursPage() {
           </div>
 
           <Link
-            href="/book?type=CUSTOM_TOUR"
+            href="/contact"
             className="px-7 py-4 rounded-2xl bg-brand-gold hover:bg-[#f3c15a] text-brand-deep font-extrabold text-sm shadow-md transition flex items-center gap-2 shrink-0"
           >
-            <span>Book Custom Charter</span>
+            <span>Request Custom Charter</span>
             <ArrowRight className="w-4 h-4" />
           </Link>
         </div>

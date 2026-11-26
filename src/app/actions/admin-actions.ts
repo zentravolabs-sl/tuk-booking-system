@@ -12,7 +12,8 @@ import {
   destinationFormSchema,
   tourPackageFormSchema,
   offerFormSchema,
-  couponFormSchema
+  couponFormSchema,
+  rideFormSchema
 } from "@/lib/validations";
 import { calculateFinalPrice, sanitizeText, slugify } from "@/lib/utils";
 import { sendBookingLifecycleEmails } from "@/lib/email";
@@ -213,8 +214,6 @@ export async function saveDestinationAction(rawInput: unknown) {
   );
 
   revalidatePath("/");
-  revalidatePath("/destinations");
-  revalidatePath(`/destinations/${cleanSlug}`);
   revalidatePath("/admin/destinations");
   return { success: true, id: savedId };
 }
@@ -231,7 +230,6 @@ export async function toggleDestinationFlagsAction(
   });
   await logAdminAction(admin, "TOGGLE_DESTINATION", "Destination", id, `Set ${field}=${value} on ${updated.name}`);
   revalidatePath("/");
-  revalidatePath("/destinations");
   revalidatePath("/admin/destinations");
   return { success: true };
 }
@@ -241,7 +239,6 @@ export async function deleteDestinationAction(id: string) {
   const dest = await prisma.destination.delete({ where: { id } });
   await logAdminAction(admin, "DELETE_DESTINATION", "Destination", id, `Deleted destination ${dest.name}`);
   revalidatePath("/");
-  revalidatePath("/destinations");
   revalidatePath("/admin/destinations");
   return { success: true };
 }
@@ -264,7 +261,6 @@ export async function saveDestinationCategoryAction(input: {
     });
   }
   await logAdminAction(admin, "SAVE_CATEGORY", "DestinationCategory", slug, `Saved category ${input.name}`);
-  revalidatePath("/destinations");
   revalidatePath("/admin/destinations");
   return { success: true };
 }
@@ -563,7 +559,6 @@ export async function updateReviewAction(
   });
   await logAdminAction(admin, `REVIEW_${status}`, "CustomerReview", id, `Review status=${status}, featured=${featured}`);
   revalidatePath("/");
-  revalidatePath("/destinations");
   revalidatePath("/tours");
   revalidatePath("/admin/reviews");
   return { success: true };
@@ -773,4 +768,102 @@ export async function saveAdminUserAction(input: {
   revalidatePath("/admin/users");
   return { success: true };
 }
+
+// 12. Our Rides CRUD
+export async function saveRideAction(rawInput: unknown) {
+  const admin = await requireAdmin();
+  const parsed = rideFormSchema.safeParse(rawInput);
+  if (!parsed.success) {
+    return {
+      success: false,
+      error: parsed.error.issues[0]?.message || "Invalid ride fields."
+    };
+  }
+
+  const d = parsed.data;
+  const baseSlug = slugify(d.slug || d.name);
+  let cleanSlug = baseSlug || `ride-${Date.now()}`;
+
+  // Ensure slug uniqueness when creating or renaming
+  const existingSlug = await prisma.ride.findUnique({
+    where: { slug: cleanSlug }
+  });
+  if (existingSlug && existingSlug.id !== d.id) {
+    cleanSlug = `${cleanSlug}-${Math.floor(100 + Math.random() * 900)}`;
+  }
+
+  const payload = {
+    name: sanitizeText(d.name),
+    slug: cleanSlug,
+    shortDescription: sanitizeText(d.shortDescription) || null,
+    image: d.image.trim(),
+    priceUsd: Number(d.priceUsd),
+    priceLkr: Number(d.priceLkr),
+    tag: sanitizeText(d.tag) || "Most Popular",
+    distance: sanitizeText(d.distance) || null,
+    travelTime: sanitizeText(d.travelTime) || null,
+    sortOrder: Number(d.sortOrder) || 0,
+    active: d.active
+  };
+
+  let savedId = d.id;
+  if (d.id) {
+    await prisma.ride.update({
+      where: { id: d.id },
+      data: payload
+    });
+  } else {
+    const created = await prisma.ride.create({
+      data: payload
+    });
+    savedId = created.id;
+  }
+
+  await logAdminAction(
+    admin,
+    d.id ? "UPDATE_RIDE" : "CREATE_RIDE",
+    "Ride",
+    savedId,
+    `${d.id ? "Updated" : "Created"} ride ${payload.name} ($${payload.priceUsd} / Rs. ${payload.priceLkr}) [${payload.tag}]`
+  );
+
+  revalidatePath("/");
+  revalidatePath("/admin");
+  revalidatePath("/admin/rides");
+  return { success: true, id: savedId };
+}
+
+export async function toggleRideActiveAction(id: string, active: boolean) {
+  const admin = await requireAdmin();
+  const updated = await prisma.ride.update({
+    where: { id },
+    data: { active }
+  });
+  await logAdminAction(
+    admin,
+    "TOGGLE_RIDE",
+    "Ride",
+    id,
+    `Set active=${active} on ride ${updated.name}`
+  );
+  revalidatePath("/");
+  revalidatePath("/admin/rides");
+  return { success: true };
+}
+
+export async function deleteRideAction(id: string) {
+  const admin = await requireAdmin();
+  const deleted = await prisma.ride.delete({ where: { id } });
+  await logAdminAction(
+    admin,
+    "DELETE_RIDE",
+    "Ride",
+    id,
+    `Deleted ride ${deleted.name}`
+  );
+  revalidatePath("/");
+  revalidatePath("/admin/rides");
+  return { success: true };
+}
+
 

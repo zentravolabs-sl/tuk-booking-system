@@ -1,14 +1,14 @@
 import React from "react";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
+import { getCurrentCustomer } from "@/lib/customer-auth";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import {
-  PopularDestinationOverlayCard,
   TourPackageCard
 } from "@/components/tourism/Cards";
-import { QuickBookingWidget } from "@/components/tourism/QuickBookingWidget";
 import { HeroCarousel } from "@/components/tourism/HeroCarousel";
+import { OurRidesSection } from "@/components/tourism/OurRidesSection";
 import {
   ShieldCheck,
   Headphones,
@@ -31,17 +31,16 @@ export default async function HomePage() {
 
   const [
     settings,
-    popularDestinations,
+    ourRides,
     featuredPackages,
     activeOffers,
-    approvedReviews
+    approvedReviews,
+    currentCustomer
   ] = await Promise.all([
     prisma.siteSettings.findUnique({ where: { id: "default" } }),
-    prisma.destination.findMany({
+    prisma.ride.findMany({
       where: { active: true },
-      include: { category: true },
-      orderBy: [{ popular: "desc" }, { featured: "desc" }, { createdAt: "asc" }],
-      take: 8
+      orderBy: [{ sortOrder: "asc" }, { createdAt: "asc" }]
     }),
     prisma.tourPackage.findMany({
       where: { active: true },
@@ -66,29 +65,30 @@ export default async function HomePage() {
       where: { status: "APPROVED" },
       orderBy: [{ featured: "desc" }, { createdAt: "desc" }],
       take: 3
-    })
+    }),
+    getCurrentCustomer()
   ]);
 
   const topOffer = activeOffers[0];
   const badgeLabels = ["Most Popular", "Best Value", "Nature & Waterfall"];
+  const customerPrefill = currentCustomer
+    ? {
+        id: currentCustomer.id,
+        fullName: currentCustomer.fullName,
+        email: currentCustomer.email,
+        phone:
+          currentCustomer.phone && currentCustomer.phone !== "Not provided"
+            ? currentCustomer.phone
+            : ""
+      }
+    : null;
 
   return (
     <div className="min-h-screen flex flex-col bg-[#FFF8ED]">
-      <Navbar phone={settings?.phone} />
+      <Navbar phone={settings?.phone} initialCustomer={customerPrefill} />
 
       {/* 1. CINEMATIC HERO SECTION (Matching Uploaded Design) */}
       <HeroCarousel />
-
-      {/* 2. FLOATING PILL SEARCH BAR */}
-      <div className="relative z-20 -mt-11 px-4 sm:px-6 lg:px-8">
-        <QuickBookingWidget
-          destinations={popularDestinations.map((d) => ({
-            id: d.id,
-            name: d.name,
-            finalPrice: d.finalPrice
-          }))}
-        />
-      </div>
 
       {/* 3. 4-ITEM TRUST STRIP */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-6 w-full">
@@ -136,32 +136,8 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* 4. EXPLORE: POPULAR DESTINATIONS (4 Portrait Overlay Cards) */}
-      <section className="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-        <div className="flex items-end justify-between mb-7">
-          <div>
-            <span className="text-[11px] font-extrabold uppercase tracking-[0.22em] text-[#164B35]">
-              EXPLORE
-            </span>
-            <h2 className="font-serif text-2xl sm:text-4xl font-bold text-[#202820] mt-1">
-              Popular Destinations
-            </h2>
-          </div>
-          <Link
-            href="/destinations"
-            className="text-xs sm:text-sm font-bold text-[#202820] hover:text-[#164B35] flex items-center gap-1.5"
-          >
-            <span>View All Destinations</span>
-            <ArrowRight className="w-4 h-4" />
-          </Link>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          {popularDestinations.slice(0, 4).map((dest) => (
-            <PopularDestinationOverlayCard key={dest.id} destination={dest} />
-          ))}
-        </div>
-      </section>
+      {/* 4B. OUR RIDES SECTION (Managed via Admin Panel with USD & Rs + Book a Ride Modal) */}
+      <OurRidesSection rides={ourRides} initialCustomer={customerPrefill} />
 
       {/* 5. HANDPICKED: OUR TOUR PACKAGES (3 Cards) */}
       <section className="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
@@ -225,11 +201,7 @@ export default async function HomePage() {
             </p>
             <div className="mt-6 flex flex-wrap items-center gap-3">
               <Link
-                href={
-                  topOffer?.couponCode
-                    ? `/book?coupon=${encodeURIComponent(topOffer.couponCode)}`
-                    : "/book"
-                }
+                href="/#our-rides"
                 className="px-6 py-3 rounded-full bg-[#E8B44C] hover:bg-[#f3c15a] text-[#0B3024] font-extrabold text-xs sm:text-sm shadow-md transition inline-flex items-center gap-2"
               >
                 <span>Book Now</span>
@@ -286,7 +258,7 @@ export default async function HomePage() {
       </section>
 
       {/* 8. TESTIMONIALS: WHAT OUR TRAVELERS SAY (3 Cards matching mockup) */}
-      <section className="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+      <section className="py-12 pb-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         <div className="flex items-end justify-between mb-7">
           <div>
             <span className="text-[11px] font-extrabold uppercase tracking-[0.22em] text-[#164B35]">
@@ -350,7 +322,8 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* 9. TRAVEL BLOG / TIPS & STORIES (3 Cards matching mockup) */}
+      {/* 9. TRAVEL BLOG / TIPS & STORIES (Hidden) */}
+      {false && (
       <section className="py-12 pb-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         <div className="flex items-end justify-between mb-7">
           <div>
@@ -378,7 +351,7 @@ export default async function HomePage() {
               date: "Nov 18, 2026",
               image:
                 "https://images.unsplash.com/photo-1586861635167-e5223aadc9fe?auto=format&fit=crop&w=1000&q=80",
-              href: "/destinations/nine-arch-bridge"
+              href: "/tours"
             },
             {
               tag: "Travel Tips",
@@ -386,15 +359,15 @@ export default async function HomePage() {
               date: "Nov 10, 2026",
               image:
                 "https://images.unsplash.com/photo-1546708973-b339540b5162?auto=format&fit=crop&w=1000&q=80",
-              href: "/destinations/little-adams-peak"
+              href: "/tours"
             },
             {
-              tag: "Destinations",
+              tag: "Highlights",
               title: "Ravana & Diyaluma Falls – A Must Visit in Ella",
               date: "Nov 05, 2026",
               image:
                 "https://images.unsplash.com/photo-1588598198321-9735fd52455b?auto=format&fit=crop&w=1000&q=80",
-              href: "/destinations/ravana-falls"
+              href: "/tours"
             }
           ].map((post, idx) => (
             <Link
@@ -426,6 +399,7 @@ export default async function HomePage() {
           ))}
         </div>
       </section>
+      )}
 
       <Footer settings={settings} />
     </div>

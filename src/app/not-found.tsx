@@ -28,10 +28,10 @@ export default function NotFound() {
             <ArrowRight className="w-3.5 h-3.5 text-brand-gold" />
           </Link>
           <Link
-            href="/destinations"
+            href="/tours"
             className="px-6 py-3 rounded-full bg-brand-gold text-brand-deep text-xs font-extrabold"
           >
-            Explore Destinations
+            Explore Tour Packages
           </Link>
         </div>
       </div>

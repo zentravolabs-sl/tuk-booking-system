@@ -3,16 +3,23 @@
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 import { prisma } from "@/lib/prisma";
+import { getCurrentCustomer } from "@/lib/customer-auth";
 import { calculateServerBookingPrice } from "@/lib/pricing";
 import {
   bookingFormSchema,
   BookingFormValues,
   contactFormSchema,
-  reviewSubmissionSchema
+  reviewSubmissionSchema,
+  rideBookingModalSchema,
+  RideBookingModalValues
 } from "@/lib/validations";
 import { generateBookingReference, sanitizeText } from "@/lib/utils";
 import { checkRateLimit } from "@/lib/rate-limit";
-import { sendBookingLifecycleEmails, sendContactInquiryEmail } from "@/lib/email";
+import {
+  sendBookingLifecycleEmails,
+  sendContactInquiryEmail,
+  sendRideBookingAdminEmail
+} from "@/lib/email";
 import { BookingType, ReviewStatus } from "@prisma/client";
 
 export async function previewBookingPriceAction(input: {
@@ -28,6 +35,15 @@ export async function previewBookingPriceAction(input: {
 
 export async function submitBookingAction(rawValues: BookingFormValues) {
   try {
+    const loggedInCustomer = await getCurrentCustomer();
+    if (!loggedInCustomer) {
+      return {
+        success: false,
+        requiresAuth: true,
+        error: "Please log in to your account to place a booking."
+      };
+    }
+
     const hdrs = headers();
     const ip = hdrs.get("x-forwarded-for") || "127.0.0.1";
     const rate = checkRateLimit(`booking:${ip}`, 10, 60 * 1000);
@@ -340,4 +356,147 @@ export async function submitCustomerReviewAction(rawValues: {
   revalidatePath("/admin/reviews");
   return { success: true };
 }
+
+export async function submitRideModalBookingAction(
+  rawValues: RideBookingModalValues
+) {
+  try {
+    const loggedInCustomer = await getCurrentCustomer();
+    if (!loggedInCustomer) {
+      return {
+        success: false,
+        requiresAuth: true,
+        error: "Please log in to your account to place a ride booking."
+      };
+    }
+
+    const hdrs = headers();
+    const ip = hdrs.get("x-forwarded-for") || "127.0.0.1";
+    const rate = checkRateLimit(`ride-booking:${ip}`, 10, 60 * 1000);
+    if (!rate.allowed) {
+      return {
+        success: false,
+        error: "Too many booking requests. Please wait a minute and try again."
+      };
+    }
+
+    const parsed = rideBookingModalSchema.safeParse(rawValues);
+    if (!parsed.success) {
+      return {
+        success: false,
+        error:
+          parsed.error.issues[0]?.message ||
+          "Please fill in all required booking fields."
+      };
+    }
+
+    const data = parsed.data;
+    const customerEmail = data.customerEmail.trim().toLowerCase();
+    const customerName = sanitizeText(data.customerName);
+    const whatsappNumber = sanitizeText(data.whatsappNumber);
+    const selectedDestination = sanitizeText(data.selectedDestination);
+    const pickupDate = sanitizeText(data.pickupDate);
+    const pickupTime = sanitizeText(data.pickupTime);
+    const passengers = data.passengers;
+    const priceUsd = Number(data.priceUsd) || 0;
+    const priceLkr = Number(data.priceLkr) || 0;
+
+    let bookingReference = generateBookingReference();
+
+    // Save booking record in database so admin also has it in Bookings dashboard
+    try {
+      const existingRef = await prisma.booking.findUnique({
+        where: { bookingReference }
+      });
+      if (existingRef) {
+        bookingReference = generateBookingReference();
+      }
+
+      const customer = await prisma.customer.upsert({
+        where: { email: customerEmail },
+        update: {
+          fullName: customerName,
+          phone: whatsappNumber,
+          totalBookings: { increment: 1 },
+          totalSpent: { increment: priceUsd }
+        },
+        create: {
+          fullName: customerName,
+          email: customerEmail,
+          phone: whatsappNumber,
+          country: "Sri Lanka / International",
+          totalBookings: 1,
+          totalSpent: priceUsd
+        }
+      });
+
+      await prisma.booking.create({
+        data: {
+          bookingReference,
+          bookingType: "DESTINATION_RIDE",
+          customerId: customer.id,
+          customTitle: `${selectedDestination} (Our Rides)`,
+          customerName,
+          customerEmail,
+          customerPhone: whatsappNumber,
+          customerCountry: "WhatsApp / Email Booking",
+          passengers,
+          bookingDate: new Date(pickupDate),
+          bookingTime: pickupTime,
+          pickupLocation: "Ella Pickup (Our Rides Quick Booking)",
+          specialRequests: priceLkr
+            ? `Booked from Our Rides section. Rate: $${priceUsd} USD / Rs. ${priceLkr.toLocaleString()}`
+            : "Booked from Our Rides section.",
+          currency: "USD",
+          basePrice: priceUsd,
+          totalPrice: priceUsd,
+          items: {
+            create: [
+              {
+                itemType: "OUR_RIDE",
+                title: selectedDestination,
+                quantity: 1,
+                unitPrice: priceUsd,
+                discount: 0,
+                totalPrice: priceUsd
+              }
+            ]
+          }
+        }
+      });
+    } catch (dbErr) {
+      console.error("Non-fatal DB log error for ride booking:", dbErr);
+    }
+
+    // Send email notification to ADMIN_NOTIFICATION_EMAIL from .env
+    const emailResult = await sendRideBookingAdminEmail({
+      bookingReference,
+      selectedDestination,
+      priceUsd,
+      priceLkr,
+      customerName,
+      whatsappNumber,
+      customerEmail,
+      pickupDate,
+      pickupTime,
+      passengers
+    });
+
+    revalidatePath("/admin");
+    revalidatePath("/admin/bookings");
+
+    return {
+      success: true,
+      bookingReference,
+      emailSent: emailResult.sent
+    };
+  } catch (error) {
+    console.error("Ride modal booking submission error:", error);
+    return {
+      success: false,
+      error: "Unable to send booking right now. Please try again."
+    };
+  }
+}
+
 

@@ -2,21 +2,27 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { toast } from "sonner";
+import {
+  getCustomerSessionStatusAction,
+  customerLogoutAction
+} from "@/app/actions/customer-auth-actions";
 import {
   Mountain,
   Menu,
   X,
   Phone,
   Search,
-  Heart,
   ShieldCheck,
-  ArrowRight
+  ArrowRight,
+  User,
+  LogOut,
+  CheckCircle2
 } from "lucide-react";
 
 const navLinks = [
   { href: "/", label: "Home" },
-  { href: "/destinations", label: "Destinations" },
   { href: "/tours", label: "Tours" },
   { href: "/offers", label: "Offers" },
   { href: "/gallery", label: "Gallery" },
@@ -24,10 +30,24 @@ const navLinks = [
   { href: "/contact", label: "Contact" }
 ];
 
-export function Navbar({ phone = "0785089432" }: { phone?: string }) {
+export function Navbar({
+  phone = "0785089432",
+  initialCustomer = null
+}: {
+  phone?: string;
+  initialCustomer?: { id: string; fullName: string; email: string } | null;
+}) {
   const pathname = usePathname();
+  const router = useRouter();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [customer, setCustomer] = useState<{
+    id: string;
+    fullName: string;
+    email: string;
+  } | null>(initialCustomer);
+  const [authChecked, setAuthChecked] = useState(Boolean(initialCustomer));
+  const [loggingOut, setLoggingOut] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -35,7 +55,43 @@ export function Navbar({ phone = "0785089432" }: { phone?: string }) {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  useEffect(() => {
+    let active = true;
+    getCustomerSessionStatusAction()
+      .then((res) => {
+        if (!active) return;
+        setCustomer(res.loggedIn ? res.customer : null);
+        setAuthChecked(true);
+      })
+      .catch(() => {
+        if (active) setAuthChecked(true);
+      });
+    return () => {
+      active = false;
+    };
+  }, [pathname]);
+
+  const handleLogout = async () => {
+    setLoggingOut(true);
+    try {
+      await customerLogoutAction();
+      setCustomer(null);
+      setMobileOpen(false);
+      toast.success("Signed out of your customer account.");
+      if (pathname?.startsWith("/dashboard")) {
+        router.push("/login");
+      }
+      router.refresh();
+    } catch {
+      toast.error("Unable to sign out right now.");
+    } finally {
+      setLoggingOut(false);
+    }
+  };
+
   if (pathname?.startsWith("/admin")) return null;
+
+  const firstName = customer?.fullName?.split(" ")[0] || customer?.fullName || "Customer";
 
   return (
     <header
@@ -46,7 +102,7 @@ export function Navbar({ phone = "0785089432" }: { phone?: string }) {
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-        {/* Brand Logo matching mockup */}
+        {/* Brand Logo */}
         <Link href="/" className="flex items-center gap-2.5 group">
           <div className="w-10 h-10 rounded-xl bg-[#164B35] border border-[#E8B44C]/40 flex items-center justify-center text-[#E8B44C] shadow-sm group-hover:scale-105 transition-transform">
             <Mountain className="w-5 h-5 stroke-[2.3]" />
@@ -82,30 +138,62 @@ export function Navbar({ phone = "0785089432" }: { phone?: string }) {
               </Link>
             );
           })}
+          {customer && (
+            <Link
+              href="/dashboard"
+              className={`text-sm font-medium transition-all ${
+                pathname?.startsWith("/dashboard")
+                  ? "text-[#E8B44C] font-semibold"
+                  : "text-white/90 hover:text-[#E8B44C]"
+              }`}
+            >
+              My Bookings
+            </Link>
+          )}
         </nav>
 
-        {/* Right Icons & Gold Book Now Button */}
-        <div className="hidden md:flex items-center gap-3.5">
-          <Link
-            href="/track-booking"
-            title="Track My Booking"
-            className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition"
-          >
-            <Search className="w-4 h-4" />
-          </Link>
-          <Link
-            href="/offers"
-            title="Special Offers"
-            className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition"
-          >
-            <Heart className="w-4 h-4" />
-          </Link>
-          <Link
-            href="/book"
-            className="bg-[#E8B44C] hover:bg-[#f3c15a] text-[#0B3024] font-extrabold text-xs sm:text-sm px-5 py-2.5 rounded-full shadow-md hover:shadow-lg transition-all"
-          >
-            Book Now
-          </Link>
+        {/* Right Side: Logged-in Status OR Customer Login Button + Book Now */}
+        <div className="hidden md:flex items-center gap-2.5">
+          {customer ? (
+            <div className="flex items-center gap-2">
+              <Link
+                href="/dashboard"
+                title={`Signed in as ${customer.fullName} (${customer.email})`}
+                className="bg-[#164B35] hover:bg-[#1e6346] text-white border border-[#E8B44C]/40 px-3.5 py-2 rounded-full text-xs font-bold transition-all inline-flex items-center gap-2 shadow-sm"
+              >
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400" />
+                </span>
+                <span className="text-white/75 font-medium hidden xl:inline">
+                  Logged in:
+                </span>
+                <span className="text-[#E8B44C] font-extrabold max-w-[120px] truncate">
+                  {firstName}
+                </span>
+              </Link>
+              <button
+                type="button"
+                onClick={handleLogout}
+                disabled={loggingOut}
+                title="Sign out of customer account"
+                className="p-2 rounded-full bg-white/10 hover:bg-red-500/25 text-white/80 hover:text-white border border-white/15 transition"
+                aria-label="Sign Out"
+              >
+                <LogOut className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          ) : (
+            authChecked && (
+              <Link
+                href="/login"
+                className="text-white/90 hover:text-[#E8B44C] border border-white/20 hover:border-[#E8B44C]/60 font-bold text-xs sm:text-sm px-4 py-2 rounded-full transition-all inline-flex items-center gap-1.5"
+              >
+                <User className="w-3.5 h-3.5 text-[#E8B44C]" />
+                <span>Login</span>
+              </Link>
+            )
+          )}
         </div>
 
         {/* Mobile Menu Toggle */}
@@ -122,6 +210,33 @@ export function Navbar({ phone = "0785089432" }: { phone?: string }) {
       {/* Mobile Drawer */}
       {mobileOpen && (
         <div className="lg:hidden bg-[#0B3024] border-t border-white/10 px-4 pt-4 pb-6 space-y-3">
+          {/* Mobile Logged-in Status Card */}
+          {customer && (
+            <div className="bg-[#164B35] border border-[#E8B44C]/35 rounded-2xl p-3.5 flex items-center justify-between gap-3">
+              <div className="min-w-0">
+                <div className="flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-wider text-emerald-300">
+                  <CheckCircle2 className="w-3.5 h-3.5" />
+                  <span>Logged In Customer</span>
+                </div>
+                <p className="text-sm font-bold text-white truncate mt-0.5">
+                  {customer.fullName}
+                </p>
+                <p className="text-[11px] text-white/75 truncate font-mono">
+                  {customer.email}
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={handleLogout}
+                disabled={loggingOut}
+                className="px-3 py-2 rounded-xl bg-white/10 hover:bg-red-500/25 text-white text-xs font-bold inline-flex items-center gap-1.5 shrink-0"
+              >
+                <LogOut className="w-3.5 h-3.5 text-[#E8B44C]" />
+                <span>Sign Out</span>
+              </button>
+            </div>
+          )}
+
           <div className="grid grid-cols-1 gap-1">
             {navLinks.map((item) => {
               const active =
@@ -144,6 +259,31 @@ export function Navbar({ phone = "0785089432" }: { phone?: string }) {
                 </Link>
               );
             })}
+
+            {customer ? (
+              <Link
+                href="/dashboard"
+                onClick={() => setMobileOpen(false)}
+                className="px-4 py-3 rounded-xl text-sm font-semibold text-[#E8B44C] bg-[#164B35]/60 hover:bg-[#164B35] flex items-center justify-between"
+              >
+                <span className="flex items-center gap-2">
+                  <User className="w-4 h-4" /> My Customer Dashboard
+                </span>
+                <ArrowRight className="w-4 h-4 opacity-60" />
+              </Link>
+            ) : (
+              <Link
+                href="/login"
+                onClick={() => setMobileOpen(false)}
+                className="px-4 py-3 rounded-xl text-sm font-medium text-[#E8B44C] hover:bg-white/5 flex items-center justify-between"
+              >
+                <span className="flex items-center gap-2">
+                  <User className="w-4 h-4" /> Login / Register
+                </span>
+                <ArrowRight className="w-4 h-4 opacity-60" />
+              </Link>
+            )}
+
             <Link
               href="/track-booking"
               onClick={() => setMobileOpen(false)}
@@ -157,13 +297,6 @@ export function Navbar({ phone = "0785089432" }: { phone?: string }) {
           </div>
 
           <div className="pt-3 border-t border-white/10 flex flex-col gap-2.5">
-            <Link
-              href="/book"
-              onClick={() => setMobileOpen(false)}
-              className="w-full bg-[#E8B44C] text-[#0B3024] font-extrabold py-3 rounded-full text-center shadow-md text-sm"
-            >
-              Book Now
-            </Link>
             <div className="flex items-center justify-between text-xs text-white/80 px-2 pt-1">
               <a href={`tel:${phone}`} className="flex items-center gap-1.5 hover:text-[#E8B44C]">
                 <Phone className="w-3.5 h-3.5 text-[#E8B44C]" />
