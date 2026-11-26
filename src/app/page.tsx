@@ -175,8 +175,9 @@ export default async function HomePage() {
         <div className="relative rounded-3xl overflow-hidden bg-[#0B3024] text-white shadow-premium min-h-[270px] flex items-center">
           <img
             src={
-              topOffer?.image ||
-              "https://images.unsplash.com/photo-1546708973-b339540b5162?auto=format&fit=crop&w=1600&q=85"
+              topOffer?.image && !topOffer.image.includes("images.unsplash.com")
+                ? topOffer.image
+                : "/images/offers/offer-highland-welcome.jpg"
             }
             alt="Special Offer Ella Tea Hills"
             className="absolute inset-0 w-full h-full object-cover opacity-70"

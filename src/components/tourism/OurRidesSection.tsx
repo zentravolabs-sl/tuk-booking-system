@@ -40,6 +40,26 @@ export interface BookingCustomerPrefill {
   phone?: string;
 }
 
+function getRidePhotoByName(ride: RideItem): string {
+  if (
+    ride.image &&
+    !ride.image.includes("images.unsplash.com") &&
+    !ride.image.startsWith("/images/rides/")
+  ) {
+    return ride.image;
+  }
+  const text = `${ride.name} ${ride.slug}`.toLowerCase();
+  if (text.includes("nine arch")) return "/images/rides/nine-arch.jpg";
+  if (text.includes("little adam")) return "/images/rides/little-adams-peak.jpg";
+  if (text.includes("diyaluma")) return "/images/rides/diyaluma-falls.jpg";
+  if (text.includes("ravana")) return "/images/rides/ravana-falls.jpg";
+  if (text.includes("lipton") || text.includes("dambatenne"))
+    return "/images/rides/liptons-seat.jpg";
+  if (text.includes("halpe") || text.includes("demodara"))
+    return "/images/rides/demodara-tea-factory.jpg";
+  return ride.image;
+}
+
 export function OurRidesSection({
   rides,
   initialCustomer = null
@@ -213,7 +233,7 @@ export function OurRidesSection({
               {/* Card Image + Tag Badge */}
               <div className="relative h-56 w-full overflow-hidden bg-[#0B3024]">
                 <img
-                  src={ride.image}
+                  src={getRidePhotoByName(ride)}
                   alt={ride.name}
                   className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
                   loading="lazy"

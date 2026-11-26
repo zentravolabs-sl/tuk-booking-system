@@ -32,6 +32,28 @@ export function DiscountBadge({
   );
 }
 
+function getPackagePhotoByName(pkg: {
+  name: string;
+  slug: string;
+  coverImage: string;
+}): string {
+  if (
+    pkg.coverImage &&
+    !pkg.coverImage.includes("images.unsplash.com") &&
+    !pkg.coverImage.startsWith("/images/packages/")
+  ) {
+    return pkg.coverImage;
+  }
+  const text = `${pkg.name} ${pkg.slug}`.toLowerCase();
+  if (text.includes("iconic") || text.includes("highlights"))
+    return "/images/packages/ella-iconic-highlights-safari.jpg";
+  if (text.includes("lipton") || text.includes("diyaluma"))
+    return "/images/packages/sunrise-liptons-seat-upper-diyaluma.jpg";
+  if (text.includes("trekker") || text.includes("peaks") || text.includes("ella rock"))
+    return "/images/packages/ella-golden-sunrise-peaks-trekker.jpg";
+  return pkg.coverImage;
+}
+
 /**
  * TourPackageCard matching the "HANDPICKED Our Tour Packages" design in the mockup
  */
@@ -73,7 +95,7 @@ export function TourPackageCard({
       {/* Top Image with yellow pill badge */}
       <div className="relative h-56 w-full overflow-hidden bg-[#0B3024]">
         <img
-          src={pkg.coverImage}
+          src={getPackagePhotoByName(pkg)}
           alt={pkg.name}
           className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
           loading="lazy"

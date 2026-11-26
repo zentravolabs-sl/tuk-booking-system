@@ -14,6 +14,27 @@ import {
   Sparkles
 } from "lucide-react";
 
+function getOfferPhotoByName(offer: {
+  title: string;
+  image: string;
+}): string {
+  if (
+    offer.image &&
+    !offer.image.includes("images.unsplash.com") &&
+    !offer.image.startsWith("/images/offers/")
+  ) {
+    return offer.image;
+  }
+  const text = offer.title.toLowerCase();
+  if (text.includes("couple") || text.includes("group") || text.includes("20%"))
+    return "/images/offers/offer-highland-welcome.jpg";
+  if (text.includes("sunrise") || text.includes("lipton") || text.includes("diyaluma"))
+    return "/images/offers/special-offer-ella-gap.jpg";
+  if (text.includes("welcome") || text.includes("first"))
+    return "/images/packages/ella-iconic-highlights-safari.jpg";
+  return "/images/offers/offer-highland-welcome.jpg";
+}
+
 export function OfferCard({
   offer
 }: {
@@ -43,7 +64,7 @@ export function OfferCard({
     <div className="bg-brand-deep text-white rounded-3xl overflow-hidden border border-brand-gold/30 shadow-premium flex flex-col md:flex-row">
       <div className="relative md:w-2/5 h-56 md:h-auto overflow-hidden">
         <img
-          src={offer.image}
+          src={getOfferPhotoByName(offer)}
           alt={offer.title}
           className="w-full h-full object-cover"
           loading="lazy"

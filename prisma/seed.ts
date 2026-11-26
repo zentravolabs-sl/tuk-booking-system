@@ -136,7 +136,7 @@ async function main() {
       shortDescription: "Marvel at Sri Lanka's world-famous colonial viaduct tucked deep inside a lush emerald tea valley as the blue mountain train glides across.",
       description:
         "Known locally as 'Ahas Namaye Palama' (The Bridge of Nine Skies), the Nine Arch Bridge in Demodara is an extraordinary masterpiece of British-Ceylonese railway engineering built entirely of stone, brick, and cement without a single piece of steel. Our Tuk Tuk takes you through a secret forest ridge road straight to the upper viewpoint, saving you the steep walk from main town, and our local drivers time your arrival perfectly with the iconic blue Kandy-Badulla train crossing.",
-      coverImage: "https://images.unsplash.com/photo-1586861635167-e5223aadc9fe?auto=format&fit=crop&w=1400&q=85",
+      coverImage: "/images/rides/nine-arch.jpg",
       price: 15,
       currency: "USD",
       priceType: PriceType.PER_TRIP,
@@ -167,9 +167,8 @@ async function main() {
       seoTitle: "Nine Arch Bridge Tuk Tuk Ride & Train Schedule Tour | Ella Tuk Tuk Taxi",
       seoDescription: "Book a private Tuk Tuk to Nine Arch Bridge in Ella. Direct forest viewpoint drop-off, exact train crossing timings, and hotel pickup included.",
       gallery: [
-        "https://images.unsplash.com/photo-1586861635167-e5223aadc9fe?auto=format&fit=crop&w=1200&q=80",
-        "https://images.unsplash.com/photo-1546708973-b339540b5162?auto=format&fit=crop&w=1200&q=80",
-        "https://images.unsplash.com/photo-1588598198321-9735fd52455b?auto=format&fit=crop&w=1200&q=80"
+        "/images/rides/nine-arch.jpg",
+        "/images/packages/ella-iconic-highlights-safari.jpg"
       ]
     },
     {
@@ -179,7 +178,7 @@ async function main() {
       shortDescription: "Experience a breathtaking 360-degree sunrise or golden sunset panorama over Ella Gap from an easy, family-friendly mountain ridge trail.",
       description:
         "Named after its sacred bigger brother Adam's Peak due to its similar pyramidal silhouette, Little Adam's Peak rises 1,141 meters above sea level and offers the most rewarding short hike in Sri Lanka. Our Tuk Tuk drops you right at the 98 Acres Resort & Flower Garden trailhead, cutting out the uphill road walk so you can stroll leisurely through fragrant tea estates to the triple summit ridges.",
-      coverImage: "https://images.unsplash.com/photo-1546708973-b339540b5162?auto=format&fit=crop&w=1400&q=85",
+      coverImage: "/images/rides/little-adams-peak.jpg",
       price: 14,
       currency: "USD",
       priceType: PriceType.PER_TRIP,
@@ -210,8 +209,8 @@ async function main() {
       seoTitle: "Little Adam's Peak Sunrise & Sunset Tuk Tuk Ride | Ella Sri Lanka",
       seoDescription: "Ride comfortably to the Little Adam's Peak trailhead in Ella. Ideal for sunrise and sunset hikes with waiting time and hotel transfer included.",
       gallery: [
-        "https://images.unsplash.com/photo-1546708973-b339540b5162?auto=format&fit=crop&w=1200&q=80",
-        "https://images.unsplash.com/photo-1578662996442-48f60103fc96?auto=format&fit=crop&w=1200&q=80"
+        "/images/rides/little-adams-peak.jpg",
+        "/images/packages/ella-golden-sunrise-peaks-trekker.jpg"
       ]
     },
     {
@@ -221,7 +220,7 @@ async function main() {
       shortDescription: "Feel the cool tropical mist of one of Sri Lanka's widest cascading waterfalls steeped in the ancient Ramayana legend of King Ravana.",
       description:
         "Plunging 25 meters down a dramatic series of tiered granite ledges in the Ravana Ella Wildlife Sanctuary, Ravana Falls is a roaring spectacle down the winding Ella-Wellawaya mountain pass. Enjoy a breezy Tuk Tuk descent through Ella Gap with panoramic valley views before cooling your feet in the crystal mountain stream at the base of the cascade.",
-      coverImage: "https://images.unsplash.com/photo-1588598198321-9735fd52455b?auto=format&fit=crop&w=1400&q=85",
+      coverImage: "/images/rides/ravana-falls.jpg",
       price: 15,
       currency: "USD",
       priceType: PriceType.PER_TRIP,
@@ -252,7 +251,7 @@ async function main() {
       seoTitle: "Ravana Falls Tuk Tuk Excursion from Ella | Waterfall Tours",
       seoDescription: "Visit the majestic Ravana Falls down the Ella Gap mountain pass with an experienced local Tuk Tuk driver.",
       gallery: [
-        "https://images.unsplash.com/photo-1588598198321-9735fd52455b?auto=format&fit=crop&w=1200&q=80"
+        "/images/rides/ravana-falls.jpg"
       ]
     },
     {
@@ -262,7 +261,7 @@ async function main() {
       shortDescription: "Conquer Ella's most dramatic cliffside summit with direct Tuk Tuk transfer to Kithalella Station trailhead and optional local trail guidance.",
       description:
         "Towering high above the southern valley, Ella Rock is the ultimate bucket-list trek for adventure lovers visiting Sri Lanka's hill country. Instead of walking extra kilometers along busy roads from town, our Tuk Tuk drives you straight to Kithalella Railway Station or the secret upper tea village shortcut, giving you clear directions past the eucalyptus forest to the jaw-dropping summit cliff.",
-      coverImage: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?auto=format&fit=crop&w=1400&q=85",
+      coverImage: "/images/packages/ella-golden-sunrise-peaks-trekker.jpg",
       price: 20,
       currency: "USD",
       priceType: PriceType.PER_TRIP,
@@ -293,7 +292,7 @@ async function main() {
       seoTitle: "Ella Rock Trailhead Tuk Tuk Transfer & Sunrise Hike | Ella Taxi",
       seoDescription: "Start your Ella Rock trek the smart way with direct Tuk Tuk drop-off at Kithalella trailhead and guaranteed return pickup.",
       gallery: [
-        "https://images.unsplash.com/photo-1578662996442-48f60103fc96?auto=format&fit=crop&w=1200&q=80"
+        "/images/packages/ella-golden-sunrise-peaks-trekker.jpg"
       ]
     },
     {
@@ -303,7 +302,7 @@ async function main() {
       shortDescription: "Step inside a 25,000-year-old limestone cavern perched on a cliffside and linked to the legendary underground tunnels of King Ravana.",
       description:
         "Located 1,370 meters above sea level on a steep forested cliff face near the historic Maha Ravana Viharaya temple, Ravana Cave is one of Sri Lanka's most intriguing archaeological and mythological sites. According to the Ramayana epic, King Ravana hid Princess Sita within this network of subterranean passages. Our Tuk Tuk brings you right to the ancient temple steps at the base of the sanctuary.",
-      coverImage: "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&w=1400&q=85",
+      coverImage: "/images/rides/ravana-falls.jpg",
       price: 18,
       currency: "USD",
       priceType: PriceType.PER_TRIP,
@@ -334,7 +333,7 @@ async function main() {
       seoTitle: "Ravana Cave & Ancient Temple Tuk Tuk Tour | Ella Sri Lanka",
       seoDescription: "Explore the legendary Ravana Cave and prehistoric cliff cavern in Ella with our guided Tuk Tuk transfer service.",
       gallery: [
-        "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&w=1200&q=80"
+        "/images/rides/ravana-falls.jpg"
       ]
     },
     {
@@ -344,7 +343,7 @@ async function main() {
       shortDescription: "Swim in natural cliff-edge infinity rock pools atop Sri Lanka's second-highest waterfall (220m) on an unforgettable half-day Tuk Tuk adventure.",
       description:
         "Standing at a breathtaking 220 meters (720 feet), Diyaluma Falls is the second-highest waterfall in Sri Lanka and easily the most thrilling natural wonder near Ella. While most buses only pass the lower bridge, our skilled Tuk Tuk drivers take the scenic mountain road up through Poonagala tea estates to Upper Diyaluma, where a gentle 35-minute trail leads you to a series of crystal-clear natural infinity pools right at the very lip of the 220m precipice!",
-      coverImage: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1400&q=85",
+      coverImage: "/images/rides/diyaluma-falls.jpg",
       price: 45,
       currency: "USD",
       priceType: PriceType.PER_TRIP,
@@ -375,8 +374,8 @@ async function main() {
       seoTitle: "Upper Diyaluma Falls Natural Infinity Pools Tuk Tuk Tour from Ella",
       seoDescription: "Book the ultimate Upper Diyaluma Falls Tuk Tuk tour from Ella. Swim in natural rock infinity pools atop Sri Lanka's 2nd highest waterfall.",
       gallery: [
-        "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80",
-        "https://images.unsplash.com/photo-1588598198321-9735fd52455b?auto=format&fit=crop&w=1200&q=80"
+        "/images/rides/diyaluma-falls.jpg",
+        "/images/packages/sunrise-liptons-seat-upper-diyaluma.jpg"
       ]
     },
     {
@@ -386,7 +385,7 @@ async function main() {
       shortDescription: "Ascend through Sir Thomas Lipton's historic Dambatenne Tea Estate to a 1,970m cloud-kissed summit overlooking five provinces of Sri Lanka.",
       description:
         "Perched high atop the Poonagala hills near Haputale, Lipton's Seat is the exact vantage point where Scottish tea pioneer Sir Thomas Lipton used to sit and survey his vast emerald empire. Climbing through narrow, winding cobblestone estate roads lined with century-old tea bushes is an unforgettable Tuk Tuk journey—best experienced at dawn before the clouds roll in. On the descent, visit the original 1890 Dambatenne Tea Factory.",
-      coverImage: "https://images.unsplash.com/photo-1566296314736-6eaac1ca0cb9?auto=format&fit=crop&w=1400&q=85",
+      coverImage: "/images/rides/liptons-seat.jpg",
       price: 42,
       currency: "USD",
       priceType: PriceType.PER_TRIP,
@@ -417,7 +416,7 @@ async function main() {
       seoTitle: "Lipton's Seat Sunrise & Dambatenne Tea Estate Tuk Tuk Tour from Ella",
       seoDescription: "Experience a magical sunrise at Lipton's Seat (1,970m) and visit Dambatenne Tea Factory on a private Tuk Tuk tour from Ella.",
       gallery: [
-        "https://images.unsplash.com/photo-1566296314736-6eaac1ca0cb9?auto=format&fit=crop&w=1200&q=80"
+        "/images/rides/liptons-seat.jpg"
       ]
     },
     {
@@ -427,7 +426,7 @@ async function main() {
       shortDescription: "Witness the unique 360-degree spiral railway engineering marvel where the mountain train loops directly underneath its own station.",
       description:
         "Famous around the world as 'The Turban Loop' because the track spirals like a knot around the mountain before passing through a tunnel directly beneath Demodara Railway Station, the Demodara Loop is the only railway spiral of its kind in Sri Lanka. Our drivers take you to the panoramic hill lookout where you can watch the train circle the entire hilltop and disappear right under the Victorian station building.",
-      coverImage: "https://images.unsplash.com/photo-1518684079-3c830dcef090?auto=format&fit=crop&w=1400&q=85",
+      coverImage: "/images/rides/demodara-tea-factory.jpg",
       price: 16,
       currency: "USD",
       priceType: PriceType.PER_TRIP,
@@ -458,7 +457,7 @@ async function main() {
       seoTitle: "Demodara Railway Loop & Heritage Station Tuk Tuk Tour | Ella",
       seoDescription: "Visit the engineering marvel of Demodara 360-degree Railway Loop and colonial station by private Tuk Tuk from Ella.",
       gallery: [
-        "https://images.unsplash.com/photo-1518684079-3c830dcef090?auto=format&fit=crop&w=1200&q=80"
+        "/images/rides/demodara-tea-factory.jpg"
       ]
     },
     {
@@ -468,7 +467,7 @@ async function main() {
       shortDescription: "Discover how authentic Uva Highland Ceylon Tea is withered, rolled, fermented, and graded—complete with a panoramic tea tasting deck.",
       description:
         "Just 15 minutes from Ella town lies the renowned Uva Halpewatte Tea Factory, standing 1,230 meters above sea level amid rolling green slopes. Take a guided tour through the aromatic factory floors to see traditional and modern Ceylon tea processing firsthand, followed by a complimentary tasting of golden Pekoe, BOPF, and artisan green teas on their sky-high glass terrace.",
-      coverImage: "https://images.unsplash.com/photo-1597318181409-cf64d0b5d8a2?auto=format&fit=crop&w=1400&q=85",
+      coverImage: "/images/rides/demodara-tea-factory.jpg",
       price: 15,
       currency: "USD",
       priceType: PriceType.PER_TRIP,
@@ -499,7 +498,7 @@ async function main() {
       seoTitle: "Uva Halpe Tea Factory Tour & Tasting Tuk Tuk Ride | Ella Sri Lanka",
       seoDescription: "Take a scenic Tuk Tuk ride to Uva Halpewatte Tea Factory in Ella for an authentic Ceylon tea tour and mountain tasting experience.",
       gallery: [
-        "https://images.unsplash.com/photo-1597318181409-cf64d0b5d8a2?auto=format&fit=crop&w=1200&q=80"
+        "/images/rides/demodara-tea-factory.jpg"
       ]
     }
   ];
@@ -537,11 +536,11 @@ async function main() {
       shortDescription: "Experience Nine Arch Bridge, Little Adam's Peak, Halpe Tea Factory, Demodara Loop, and Ravana Falls in one seamless private Tuk Tuk tour.",
       description:
         "Short on time in Ella and want to experience every postcard-famous landmark without rushing or worrying about directions? Our signature Ella Iconic Highlights Day Safari pairs you with one of our senior local driver-guides for a full day of mountain magic. From timing the blue train at Nine Arch Bridge to sipping fresh Uva tea at Halpewatte and watching the sunset from Little Adam's Peak, every detail is thoughtfully curated.",
-      coverImage: "https://images.unsplash.com/photo-1586861635167-e5223aadc9fe?auto=format&fit=crop&w=1400&q=85",
+      coverImage: "/images/packages/ella-iconic-highlights-safari.jpg",
       gallery: [
-        "https://images.unsplash.com/photo-1586861635167-e5223aadc9fe?auto=format&fit=crop&w=1200&q=80",
-        "https://images.unsplash.com/photo-1546708973-b339540b5162?auto=format&fit=crop&w=1200&q=80",
-        "https://images.unsplash.com/photo-1588598198321-9735fd52455b?auto=format&fit=crop&w=1200&q=80"
+        "/images/packages/ella-iconic-highlights-safari.jpg",
+        "/images/rides/little-adams-peak.jpg",
+        "/images/rides/ravana-falls.jpg"
       ],
       duration: "7 - 8 Hours (Full Day)",
       startTime: "08:00 AM",
@@ -587,10 +586,11 @@ async function main() {
       shortDescription: "Catch a golden dawn at 1,970m Lipton's Seat before swimming in the natural rock pools atop Sri Lanka's second-highest waterfall.",
       description:
         "Our most epic highland expedition takes you beyond Ella town into the soaring ridges of Haputale and Poonagala. Depart before dawn to stand beside Sir Thomas Lipton's statue at 1,970 meters as the morning sun illuminates five provinces below. After warm spiced tea and breakfast at the summit, cruise down scenic mountain backroads to Upper Diyaluma Falls for a refreshing swim in natural infinity pools overlooking a 220-meter drop.",
-      coverImage: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1400&q=85",
+      coverImage: "/images/packages/sunrise-liptons-seat-upper-diyaluma.jpg",
       gallery: [
-        "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80",
-        "https://images.unsplash.com/photo-1566296314736-6eaac1ca0cb9?auto=format&fit=crop&w=1200&q=80"
+        "/images/packages/sunrise-liptons-seat-upper-diyaluma.jpg",
+        "/images/rides/liptons-seat.jpg",
+        "/images/rides/diyaluma-falls.jpg"
       ],
       duration: "8 Hours",
       startTime: "05:00 AM",
@@ -634,10 +634,11 @@ async function main() {
       shortDescription: "Designed for active hikers: early trailhead transfer to Ella Rock, train spotting at Nine Arch Bridge, and panoramic views from Little Adam's Peak.",
       description:
         "Beat the midday tropical heat and crowds with our half-day morning adventure designed specifically for hikers and photographers. We drop you at the Kithalella trailhead at first light for your Ella Rock ascent, pick you up for a hearty coconut refresh, bring you to the secret forest vantage point for the morning train at Nine Arch Bridge, and wrap up at Little Adam's Peak.",
-      coverImage: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?auto=format&fit=crop&w=1400&q=85",
+      coverImage: "/images/packages/ella-golden-sunrise-peaks-trekker.jpg",
       gallery: [
-        "https://images.unsplash.com/photo-1578662996442-48f60103fc96?auto=format&fit=crop&w=1200&q=80",
-        "https://images.unsplash.com/photo-1546708973-b339540b5162?auto=format&fit=crop&w=1200&q=80"
+        "/images/packages/ella-golden-sunrise-peaks-trekker.jpg",
+        "/images/rides/little-adams-peak.jpg",
+        "/images/rides/nine-arch.jpg"
       ],
       duration: "5 - 6 Hours (Half Day)",
       startTime: "05:30 AM",
@@ -707,7 +708,7 @@ async function main() {
       slug: "highland-welcome-15-off-first-booking",
       description: "First time exploring Ella with us? Use code ELLA15 at checkout to receive an instant 15% discount on any full-day tour package or waterfall expedition.",
       badgeText: "FIRST BOOKING SPECIAL",
-      image: "https://images.unsplash.com/photo-1586861635167-e5223aadc9fe?auto=format&fit=crop&w=1000&q=80",
+      image: "/images/packages/ella-iconic-highlights-safari.jpg",
       offerType: OfferType.FIRST_BOOKING,
       discountType: DiscountType.PERCENTAGE,
       discountValue: 15,
@@ -726,7 +727,7 @@ async function main() {
       slug: "sunrise-early-bird-8-off",
       description: "Book any sunrise expedition starting at 5:00 AM or 5:30 AM and save $8 instantly with coupon SUNRISE8. Includes complimentary hot Ceylon tea!",
       badgeText: "EARLY BIRD DEAL",
-      image: "https://images.unsplash.com/photo-1566296314736-6eaac1ca0cb9?auto=format&fit=crop&w=1000&q=80",
+      image: "/images/offers/special-offer-ella-gap.jpg",
       offerType: OfferType.SEASONAL_OFFER,
       discountType: DiscountType.FIXED,
       discountValue: 8,
@@ -745,7 +746,7 @@ async function main() {
       slug: "couple-group-saver-20-off",
       description: "Planning a custom itinerary or multi-stop photography day in Ella? Apply TUKTUK20 on bookings over $40 for 20% off.",
       badgeText: "LIMITED TIME OFFER",
-      image: "https://images.unsplash.com/photo-1546708973-b339540b5162?auto=format&fit=crop&w=1000&q=80",
+      image: "/images/offers/offer-highland-welcome.jpg",
       offerType: OfferType.LIMITED_TIME,
       discountType: DiscountType.PERCENTAGE,
       discountValue: 20,
@@ -1167,7 +1168,7 @@ async function main() {
       name: "Nine Arch Bridge & Forest Viewpoint Ride",
       slug: "nine-arch-bridge-forest-viewpoint-ride",
       shortDescription: "Direct Tuk Tuk ride to the secret upper tea ridge viewpoint timed with the iconic Blue Mountain Train crossing.",
-      image: "https://images.unsplash.com/photo-1586861635167-e5223aadc9fe?auto=format&fit=crop&w=1400&q=85",
+      image: "/images/rides/nine-arch.jpg",
       priceUsd: 12,
       priceLkr: 3600,
       tag: "Most Popular",
@@ -1180,7 +1181,7 @@ async function main() {
       name: "Little Adam's Peak Sunrise / Sunset Ride",
       slug: "little-adams-peak-sunrise-sunset-ride",
       shortDescription: "Private round-trip Tuk Tuk transfer straight to the 98 Acres trailhead for 360° Ella Gap mountain views.",
-      image: "https://images.unsplash.com/photo-1546708973-b339540b5162?auto=format&fit=crop&w=1400&q=85",
+      image: "/images/rides/little-adams-peak.jpg",
       priceUsd: 10,
       priceLkr: 3000,
       tag: "Best Value",
@@ -1193,7 +1194,7 @@ async function main() {
       name: "Upper Diyaluma Falls & Natural Infinity Pools",
       slug: "upper-diyaluma-falls-infinity-pools-ride",
       shortDescription: "Half-day scenic mountain Tuk Tuk ride via Poonagala tea estates to the top of Sri Lanka's 220m waterfall.",
-      image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1400&q=85",
+      image: "/images/rides/diyaluma-falls.jpg",
       priceUsd: 38,
       priceLkr: 11500,
       tag: "Nature & Waterfall",
@@ -1206,7 +1207,7 @@ async function main() {
       name: "Ravana Falls & Ella Gap Scenic Descent",
       slug: "ravana-falls-ella-gap-scenic-ride",
       shortDescription: "Breezy Tuk Tuk excursion down the dramatic Ella Gap mountain pass to the roaring 25m Ravana cascade.",
-      image: "https://images.unsplash.com/photo-1588598198321-9735fd52455b?auto=format&fit=crop&w=1400&q=85",
+      image: "/images/rides/ravana-falls.jpg",
       priceUsd: 14,
       priceLkr: 4200,
       tag: "Nature & Waterfall",
@@ -1219,7 +1220,7 @@ async function main() {
       name: "Lipton's Seat Sunrise & Dambatenne Tea Ride",
       slug: "liptons-seat-sunrise-dambatenne-ride",
       shortDescription: "Climb through emerald century-old tea plantations to the 1,970m cloud summit overlooking five provinces.",
-      image: "https://images.unsplash.com/photo-1566296314736-6eaac1ca0cb9?auto=format&fit=crop&w=1400&q=85",
+      image: "/images/rides/liptons-seat.jpg",
       priceUsd: 35,
       priceLkr: 10500,
       tag: "Most Popular",
@@ -1232,7 +1233,7 @@ async function main() {
       name: "Halpe Tea Factory & Demodara Railway Loop",
       slug: "halpe-tea-factory-demodara-loop-ride",
       shortDescription: "Visit the famous 360° spiral railway track at Demodara followed by fresh highland tea tasting at Halpewatte.",
-      image: "https://images.unsplash.com/photo-1597318181409-cf64d0b5d8a2?auto=format&fit=crop&w=1400&q=85",
+      image: "/images/rides/demodara-tea-factory.jpg",
       priceUsd: 16,
       priceLkr: 4800,
       tag: "Best Value",
